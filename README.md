@@ -2,7 +2,7 @@
 
 **Intelligent Visual Quality Inspection System using Machine Learning and OpenCV**
 
-An advanced machine learning-based quality inspection system that uses computer vision and classical ML models to detect defects in smartphone screens. This project implements a complete pipeline from image preprocessing through model training and evaluation, culminating in a real-time webcam demonstration.
+An advanced machine learning-based quality inspection system that uses computer vision and classical ML models to detect defects in smartphone screens. This project implements a complete pipeline from image preprocessing through model training and evaluation, culminating in a real-time Streamlit web application with live webcam demonstration.
 
 ---
 
@@ -12,16 +12,18 @@ VisionInspect AI is designed to automatically detect cracks and defects in smart
 
 ```
 Images → OpenCV Preprocessing → Feature Extraction (LBP + Edge Density) 
-→ Train 3 Classifiers (KNN, SVM, Random Forest) → Evaluate & Compare → Live Webcam Demo
+→ Train 3 Classifiers (KNN, SVM, Random Forest) → Evaluate & Compare 
+→ Streamlit Web UI with Live Webcam Demo
 ```
 
 **Key Features:**
 - ✅ Automated preprocessing with OpenCV
 - ✅ Advanced feature extraction using Local Binary Patterns (LBP)
 - ✅ Multiple classifier comparison (KNN, SVM, Random Forest)
+- ✅ Interactive 4-page Streamlit web application
 - ✅ Real-time webcam-based defect detection
-- ✅ Interactive Streamlit web interface
-- ✅ Comprehensive model evaluation and metrics
+- ✅ Comprehensive model evaluation with error analysis
+- ✅ Beautiful visualizations with Plotly and Seaborn
 
 ---
 
@@ -59,106 +61,132 @@ data/
 
 ## 🛠️ Tech Stack
 
-| Category | Technology | Purpose |
-|----------|-----------|---------|
-| **Language** | Python 3.10+ | Core development |
-| **Computer Vision** | OpenCV | Image preprocessing & webcam capture |
-| **Feature Extraction** | scikit-image | Local Binary Pattern (LBP) computation |
-| **Machine Learning** | scikit-learn | KNN, SVM, Random Forest, GridSearch |
-| **Data Processing** | NumPy, Pandas | Array & data manipulation |
-| **Visualization** | Matplotlib, Seaborn | Confusion matrices & performance charts |
-| **Web UI** | Streamlit | Interactive web interface |
-| **Model Persistence** | joblib | Save/load trained models |
+| Category | Technology | Purpose | Version |
+|----------|-----------|---------|---------|
+| **Language** | Python | Core development | 3.10+ |
+| **Computer Vision** | OpenCV | Image preprocessing & webcam capture | 4.8.0+ |
+| **Feature Extraction** | scikit-image | Local Binary Pattern (LBP) computation | 0.21.0+ |
+| **Machine Learning** | scikit-learn | KNN, SVM, RF, GridSearch, StandardScaler | 1.3.0+ |
+| **Data Processing** | NumPy | Array & numerical operations | 1.24.0+ |
+| **Data Analysis** | Pandas | Data manipulation & CSV handling | 2.0.0+ |
+| **Visualization** | Matplotlib | Static plots & confusion matrices | 3.7.0+ |
+| **Interactive Plots** | Seaborn | Enhanced heatmaps & statistical visualizations | 0.12.0+ |
+| **Interactive Charts** | Plotly | Interactive ROC curves & bar charts | 5.13.0+ |
+| **Web Framework** | Streamlit | Multi-page interactive web application | 1.25.0+ |
+| **Model Persistence** | joblib | Save/load trained models & scalers | 1.3.0+ |
+
+---
+
+## 🌐 Streamlit Application
+
+The project includes a **4-page Streamlit web application** with comprehensive visualization and prediction capabilities:
+
+### Application Pages
+
+**1. 🔍 Predict Page (by Ifra)**
+- Single image upload (drag & drop or file selector)
+- Live camera snapshot capture
+- Image preprocessing visualization (original → grayscale → edges)
+- Real-time prediction with confidence score
+- Model selector dropdown (KNN / SVM / RF)
+- Batch prediction for multiple images
+- Batch results download as CSV
+
+**2. 🎥 Live Demo Page (by Faiqa)**
+- Real-time webcam feed with continuous frame processing
+- Start/Stop controls for live detection
+- Frame-by-frame prediction display
+- Live prediction history (last 5–10 frames)
+- Feature visualization:
+  - LBP pattern heatmap
+  - Edge map visualization
+  - Feature vector bar chart
+- FPS (frames per second) indicator
+- Downloadable detection report
+
+**3. ⚖️ Model Comparison Page (by Ayesha)**
+- Interactive metrics comparison (Accuracy, Precision, Recall, F1-Score)
+- Grouped bar chart showing all metrics for KNN, SVM, Random Forest
+- Training time vs accuracy tradeoff visualization
+- Summary metrics table with best values highlighted
+- Best model callout banner with confidence score
+- Expandable "How This Model Works" sections (plain English explanations)
+- GridSearch results heatmap (C vs gamma for SVM)
+
+**4. 📊 Metrics & Evaluation Page (by Wajiha)**
+- Model selector dropdown for detailed metrics
+- Confusion matrix heatmap (with interpretation guide)
+- Classification report table
+- ROC curve comparison (all 3 models on same plot)
+- Error gallery:
+  - Grid of false positive images (normal flagged as defective)
+  - Grid of false negative images (defective missed)
+  - Image count per category
+- Interactive explainers:
+  - "What does Accuracy mean?"
+  - "What does Recall mean?" (especially important for quality control)
+  - "What is AUC/ROC?"
+  - "Cost-benefit analysis of FP vs FN"
+
+### Sidebar Navigation
+- Project title & brief description
+- Navigation buttons for all 4 pages
+- Model selector dropdown (shared across all pages)
+- Quick stats panel (selected model's accuracy)
+- Project GitHub link
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Python 3.10 or higher
+- pip package manager
+- Git
 
 ### Installation
 
-```bash
-# Clone the repository
-git clone https://github.com/ifra817/VisionInspect-AI.git
-cd VisionInspect-AI
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/ifra817/VisionInspect-AI.git
+   cd VisionInspect-AI
+   ```
 
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+2. **Create virtual environment**
+   ```bash
+   python -m venv venv
+   
+   # On Windows:
+   venv\Scripts\activate
+   
+   # On macOS/Linux:
+   source venv/bin/activate
+   ```
 
-# Install dependencies
-pip install -r requirements.txt
-```
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### Requirements File
-```
-opencv-python==4.8.0.74
-scikit-image==0.21.0
-scikit-learn==1.3.0
-numpy==1.24.3
-pandas==2.0.3
-matplotlib==3.7.1
-seaborn==0.12.2
-streamlit==1.25.0
-joblib==1.3.1
-```
+4. **Download dataset**
+   - Download "Cracked and Intact Smartphone Images Dataset" from Kaggle
+   - Extract and organize into `data/train/`, `data/val/`, `data/test/` structure
+   - Subfolder structure: `normal/` and `defective/`
 
----
-
-## 🔬 OpenCV Preprocessing Pipeline
-
-The preprocessing pipeline is optimized for crack detection and follows this exact sequence:
-
-1. **Resize** → `cv2.resize(img, (128, 128))` — standardize input size
-2. **Grayscale** → `cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)` — cracks are texture patterns, not color-dependent
-3. **Gaussian Blur** → `cv2.GaussianBlur(gray, (5,5), 0)` — reduce noise
-4. **Edge Detection** → `cv2.Canny(blurred, 50, 150)` — extract crack patterns
-5. **Normalization** → `cv2.normalize(...)` — scale to 0–1 range
-
-**What's NOT included:** Contour detection, thresholding, or GLCM (computational efficiency over 3-day timeline).
+5. **Run the Streamlit application**
+   ```bash
+   streamlit run app.py
+   ```
+   
+   The application will open in your browser at `http://localhost:8501`
 
 ---
 
-## 🧠 Feature Extraction
-
-### Local Binary Patterns (LBP)
-- **Purpose:** Captures micro-texture patterns; cracks appear as irregular LBP patterns
-- **Implementation:** `skimage.feature.local_binary_pattern`
-- **Parameters:** `radius=3, n_points=24, method='uniform'`
-- **Output:** Normalized histogram (26 bins)
-
-### Edge Density
-- **Purpose:** Quantifies crack concentration across the image
-- **Method:** Divide preprocessed image into 4×4 grid (16 regions)
-- **Metric:** Total edge pixels / total pixels per region
-- **Output:** 16 feature values
-
-### Feature Vector
-**Total dimensions:** 26 (LBP) + 16 (edge density) = **42 features**
-
-All features are standardized using `sklearn.preprocessing.StandardScaler` before model training.
-
----
-
-## 🤖 Machine Learning Models
-
-Three classifiers are trained and compared for optimal performance:
-
-| Model | Key Hyperparameters | Expected Accuracy | Training Time |
-|-------|-------------------|-------------------|---------------|
-| **K-Nearest Neighbors (KNN)** | `n_neighbors=5` (tuned via GridSearch) | 75–82% | Fast |
-| **Support Vector Machine (SVM)** | `kernel='rbf', C=10, gamma='scale'` | **83–90%** | Medium |
-| **Random Forest** | `n_estimators=200, max_depth=None` | 80–88% | Medium |
-
-### Model Selection
-**SVM with RBF kernel** is expected to achieve the highest accuracy and is recommended as the production model.
-
-### Hyperparameter Tuning
-- GridSearchCV with 5-fold cross-validation applied to SVM
-- KNN and RF trained with default tuned parameters to conserve time
-
----
-
-## 📁 Project Structure
+## 📋 Project Structure
 
 ```
 VisionInspect-AI/
-├── data/                          # Dataset directory
+├── data/                          # Dataset directory (gitignored)
 │   ├── train/
 │   │   ├── normal/
 │   │   └── defective/
@@ -168,174 +196,265 @@ VisionInspect-AI/
 │   └── test/
 │       ├── normal/
 │       └── defective/
-├── notebooks/                     # Jupyter notebooks for exploration
+│
+├── notebooks/                     # Jupyter notebooks for analysis
 │   ├── 01_eda.ipynb              # Exploratory data analysis
-│   ├── 02_preprocessing.ipynb    # Preprocessing validation
-│   └── 03_model_training.ipynb   # Training & evaluation
+│   ├── 02_preprocessing.ipynb    # Preprocessing validation & testing
+│   ├── 03_model_training.ipynb   # Model training & GridSearch process
+│   └── 04_evaluation.ipynb       # Evaluation & error analysis
+│
 ├── src/                          # Source code modules
+│   ├── __init__.py
 │   ├── preprocessing.py          # OpenCV preprocessing pipeline
 │   ├── feature_extraction.py     # LBP & edge density extraction
 │   ├── train.py                  # Model training & GridSearch
-│   └── demo.py                   # Pure OpenCV webcam demo
-├── models/                       # Trained model files (.pkl)
-│   └── best_model.pkl
-├── results/                      # Evaluation outputs
-│   ├── confusion_matrix.png
-│   ├── roc_curve.png
-│   └── model_comparison.png
-├── app.py                        # Streamlit web application
+│   ├── evaluate.py               # Model evaluation & metrics
+│   └── demo_live.py              # Pure OpenCV backup demo (fallback)
+│
+├── pages/                        # Streamlit pages
+│   ├── __init__.py
+│   ├── predict.py                # Predict page (Ifra)
+│   ├── live_demo.py              # Live Demo page (Faiqa)
+│   ├── model_compare.py          # Model Comparison page (Ayesha)
+│   └── metrics.py                # Metrics & Evaluation page (Wajiha)
+│
+├── models/                       # Trained model files
+│   ├── knn.pkl                   # Trained KNN model
+│   ├── svm.pkl                   # Trained SVM model (best)
+│   ├── rf.pkl                    # Trained Random Forest model
+│   ├── scaler.pkl                # Feature StandardScaler
+│   └── metadata.pkl              # Training metadata
+│
+├── results/                      # Evaluation outputs & visualizations
+│   ├── confusion_matrices.png    # Confusion matrix comparison
+│   ├── roc_curves.png            # ROC curve comparison
+│   ├── model_comparison.png      # Metrics bar chart
+│   ├── training_time.png         # Training time comparison
+│   └── eval_results.pkl          # Detailed evaluation metrics
+│
+├── app.py                        # Main Streamlit application
 ├── requirements.txt              # Python dependencies
-├── .gitignore                    # Exclude large datasets
-└── README.md                     # This file
+├── .gitignore                    # Git ignore rules
+├── README.md                     # This file
+├── team_roles.md                 # Team responsibilities & assignments
+└── LICENSE                       # Project license
 ```
 
 ---
 
-## 🚀 Quick Start
+## 🔬 OpenCV Preprocessing Pipeline
 
-### 1. Data Preparation
-```bash
-# Download dataset from Kaggle
-# Organize into data/ folder with train/val/test structure
-# Place train/val/test splits as shown above
+The preprocessing pipeline is optimized for crack detection. Each image undergoes this exact sequence:
+
+### Preprocessing Steps
+
+1. **Resize** → `cv2.resize(img, (128, 128))`
+   - Standardizes input size for consistent feature extraction
+   - 128×128 balances detail preservation with computational efficiency
+
+2. **Grayscale Conversion** → `cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)`
+   - Cracks are texture patterns, not color-dependent
+   - Reduces dimensionality for faster feature extraction
+
+3. **Gaussian Blur** → `cv2.GaussianBlur(gray, (5,5), 0)`
+   - Noise reduction and smoothing
+   - Kernel size (5,5) balances noise removal with edge preservation
+
+4. **Canny Edge Detection** → `cv2.Canny(blurred, 50, 150)`
+   - Extracts edge maps that highlight crack structures
+   - Thresholds: 50 (low), 150 (high) for crack detection
+   - Output: binary edge map
+
+5. **Normalization** → `cv2.normalize(...)`
+   - Scales pixel values to [0, 1] range
+   - Ensures consistent input for feature extraction
+
+### Code Example
+```python
+from src.preprocessing import preprocess_image
+
+# Preprocess single image
+img_path = "data/test/defective/image_001.jpg"
+preprocessed = preprocess_image(img_path)  # Returns grayscale and edge map
 ```
 
-### 2. Training
-```bash
-# Run the complete training pipeline
-python src/train.py
+---
 
-# Output: best_model.pkl saved in models/
+## 🧠 Feature Extraction
+
+### Local Binary Patterns (LBP) - 26 Features
+**Purpose:** Captures micro-texture patterns; cracks appear as irregular LBP patterns
+
+- **Implementation:** `skimage.feature.local_binary_pattern`
+- **Parameters:** radius=3, n_points=24, method='uniform'
+- **Output:** Normalized histogram with 26 bins
+- **Why it works:** LBP encodes local texture variations that distinguish cracks from intact surfaces
+
+### Edge Density - 16 Features
+**Purpose:** Quantifies crack concentration and distribution across image
+
+- **Method:** Divide preprocessed image into 4×4 grid (16 regions)
+- **Metric:** Total edge pixels / total pixels per region
+- **Output:** 16 feature values representing edge density per region
+- **Why it works:** Defective screens have concentrated edge density in crack areas
+
+### Feature Vector - 42 Dimensions
+```
+[26 LBP bins] + [16 Edge density values] = 42 total features
 ```
 
-### 3. Web Interface (Streamlit)
-```bash
-streamlit run app.py
-```
-Navigate to `http://localhost:8501` to access the web interface.
+All features are standardized using `sklearn.preprocessing.StandardScaler` before model training.
 
-Features:
-- Image upload for quick prediction
-- Real-time webcam feed analysis
-- Model performance metrics
-- Interactive defect visualization
+### Code Example
+```python
+from src.feature_extraction import extract_all_features
 
-### 4. Webcam Demo (OpenCV)
-```bash
-python src/demo.py
+# Extract features from preprocessed image
+gray_img = ...     # grayscale image
+edge_map = ...     # edge detection output
+features = extract_all_features(gray_img, edge_map)  # 42-dim vector
 ```
-- Live detection on webcam feed
-- **Press 'q' to quit**
-- Green label: Normal screen
-- Red label: Defective screen
+
+---
+
+## 🤖 Machine Learning Models
+
+Three classifiers are trained, evaluated, and compared for optimal performance:
+
+### Model Comparison
+
+| Model | Algorithm | Key Hyperparameters | Expected Accuracy | Training Speed | Interpretability |
+|-------|-----------|-------------------|------------------|-----------------|-----------------|
+| **KNN** | K-Nearest Neighbors | `n_neighbors=5` | 75–82% | ⚡ Fast | ✅ High |
+| **SVM** 🏆 | Support Vector Machine (RBF) | `kernel='rbf', C=10, gamma='scale'` | **83–90%** | ⏱️ Medium | ⚠️ Low |
+| **RF** | Random Forest | `n_estimators=200, max_depth=None` | 80–88% | ⏱️ Medium | ✅ Medium |
+
+### Recommended Model
+**SVM with RBF kernel** is expected to achieve the highest accuracy and is recommended as the production model.
+
+### Hyperparameter Tuning
+- **GridSearchCV** applied to SVM with 5-fold cross-validation
+- Parameter grid:
+  - C values: [0.1, 1, 10, 100]
+  - gamma values: ['scale', 'auto', 0.001, 0.01]
+- KNN and RF use optimized default parameters for time efficiency
+
+### Code Example
+```python
+from src.train import train_all_models
+
+# Train all three models
+train_all_models(X_train, y_train, X_val, y_val)
+# Outputs: knn.pkl, svm.pkl, rf.pkl, metadata.pkl
+```
 
 ---
 
 ## 📈 Model Evaluation
 
-The pipeline generates comprehensive evaluation metrics:
+The project provides comprehensive evaluation metrics and visualizations:
 
-### Metrics
-- **Accuracy:** Overall correctness
-- **Precision:** True positives among predicted defects
-- **Recall:** Defect detection rate
-- **F1-Score:** Harmonic mean of precision & recall
-- **Confusion Matrix:** TP, TN, FP, FN breakdown
-- **ROC Curve:** Trade-off between true positive and false positive rates
+### Evaluation Metrics
+
+- **Accuracy** — Overall correctness rate
+- **Precision** — True positives among predicted defects (important to avoid false alarms)
+- **Recall** — Defect detection rate (critical: don't miss actual defects!)
+- **F1-Score** — Harmonic mean of precision & recall
+- **ROC-AUC** — Area Under Curve; evaluates performance across all decision thresholds
+- **Confusion Matrix** — Breakdown of TP, TN, FP, FN
+
+### Confusion Matrix Interpretation
+
+```
+                 Predicted
+                Normal  Defective
+Actual  Normal  [TN]    [FP]        ← False Positives (false alarms)
+        Defective[FN]    [TP]        ↑ False Negatives (missed defects - critical!)
+```
+
+**In Quality Control:**
+- **False Negatives (FN)** are most costly — defective product reaches customer
+- **False Positives (FP)** cause extra review — less critical than FN
+
+### ROC Curve
+- Plots True Positive Rate vs False Positive Rate
+- AUC: 0.5 (random) to 1.0 (perfect)
+- Higher & further left = better classifier
 
 ### Output Files
-- `results/confusion_matrix.png` — Model-wise confusion matrices
-- `results/roc_curve.png` — ROC curves for all models
-- `results/model_comparison.png` — Accuracy/F1 comparison chart
-
----
-
-## 📋 Implementation Timeline (3 Days)
-
-### **Day 1 — Foundation**
-- ✅ Clone repository, download dataset, set up environment
-- ✅ Implement OpenCV preprocessing pipeline
-- ✅ Prototype LBP feature extraction
-- ✅ Build Streamlit UI skeleton
-- **Checkpoint:** Load image → preprocess → extract features
-
-### **Day 2 — Core ML**
-- ✅ Integrate complete feature extraction pipeline
-- ✅ Train KNN, SVM, and Random Forest on training set
-- ✅ Perform SVM GridSearch with 5-fold CV
-- ✅ Generate confusion matrices and evaluation metrics
-- ✅ Connect Streamlit to trained models
-- **Checkpoint:** All models trained, metrics computed, Streamlit upload functional
-
-### **Day 3 — Polish & Demo**
-- ✅ Integrate webcam real-time detection
-- ✅ Final evaluation on test set
-- ✅ Create comparison charts
-- ✅ Prepare presentation slides
-- ✅ Practice live demo walkthrough
-- **Checkpoint:** Full dry run of presentation with live webcam demo
+- `results/confusion_matrices.png` — All 3 models' confusion matrices
+- `results/roc_curves.png` — ROC curves comparison
+- `results/eval_results.pkl` — Detailed metrics dictionary
 
 ---
 
 ## 🎮 Live Webcam Demo
 
-The webcam demo is implemented using OpenCV and provides real-time defect detection:
+### Streamlit Live Demo Page
+The Streamlit Live Demo page provides real-time detection with full feature visualization:
 
 ```python
-cap = cv2.VideoCapture(0)
-model = joblib.load('models/best_model.pkl')
-
-while True:
-    ret, frame = cap.read()
-    features = extract_features(frame)
-    pred = model.predict([features])[0]
-    label = "DEFECTIVE" if pred == 1 else "NORMAL"
-    color = (0, 0, 255) if pred == 1 else (0, 255, 0)
-    cv2.putText(frame, label, (30, 50), cv2.FONT_HERSHEY_SIMPLEX, 1.5, color, 3)
-    cv2.imshow('VisionInspect AI', frame)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-cap.release()
-cv2.destroyAllWindows()
+# Click "Start Detection" button
+# - Captures frames from webcam
+# - Preprocesses each frame
+# - Extracts features
+# - Predicts defect status
+# - Displays with confidence score
+# - Shows feature visualizations (LBP, edges, feature vector)
+# - Maintains history of last 5-10 predictions
 ```
 
+### Pure OpenCV Fallback Demo
+If Streamlit webcam issues occur, run the pure OpenCV version:
+
+```bash
+python src/demo_live.py
+```
+
+**Output:**
+- Live video window with annotations
+- Green label: **NORMAL** (intact screen)
+- Red label: **DEFECTIVE** (crack detected)
+- Confidence score displayed
+- Press **'q'** to quit
+
 ### Demo Requirements
-- **Lighting:** Use consistent background and ambient lighting
+- **Lighting:** Consistent ambient lighting; avoid shadows
 - **Props:** Phone photo (printed or displayed on another screen)
-- **Stability:** Test early on Day 3 before final presentation
+- **Stability:** Test 30 minutes before demo; adjust camera angle if needed
 
 ---
 
-## ⚙️ Configuration
+## ⚙️ Configuration Parameters
 
-### Preprocessing Parameters
+### Preprocessing Configuration
 ```python
-# Image size
-IMG_SIZE = 128
+IMG_SIZE = 128                  # Image resize dimension
+BLUR_KERNEL = (5, 5)           # Gaussian blur kernel
+CANNY_LOW = 50                 # Canny low threshold
+CANNY_HIGH = 150               # Canny high threshold
+NORMALIZE_RANGE = [0, 1]       # Normalization range
+```
 
-# Gaussian blur kernel
-BLUR_KERNEL = (5, 5)
-
-# Canny edge detection thresholds
-CANNY_LOW = 50
-CANNY_HIGH = 150
-
-# LBP parameters
+### Feature Extraction Configuration
+```python
+# LBP Parameters
 LBP_RADIUS = 3
 LBP_N_POINTS = 24
 LBP_METHOD = 'uniform'
+LBP_BINS = 26
 
-# Edge density grid
-EDGE_GRID = 4  # 4x4 grid = 16 features
+# Edge Density Grid
+EDGE_GRID_SIZE = 4             # 4x4 grid = 16 features
+TOTAL_FEATURES = 42            # 26 LBP + 16 edge density
 ```
 
-### Model Parameters
+### Model Hyperparameters
 ```python
 # KNN
 KNN_NEIGHBORS = 5
 
-# SVM
+# SVM (GridSearch best params)
 SVM_KERNEL = 'rbf'
 SVM_C = 10
 SVM_GAMMA = 'scale'
@@ -343,81 +462,270 @@ SVM_GAMMA = 'scale'
 # Random Forest
 RF_N_ESTIMATORS = 200
 RF_MAX_DEPTH = None
+RF_MIN_SAMPLES_SPLIT = 2
 
-# GridSearchCV
+# GridSearchCV Configuration
 CV_FOLDS = 5
+RANDOM_STATE = 42
+```
+
+### Data Split Configuration
+```python
+TRAIN_SPLIT = 0.70             # 70% training
+VAL_SPLIT = 0.15               # 15% validation
+TEST_SPLIT = 0.15              # 15% testing
 ```
 
 ---
 
-## 🚨 Risk Mitigations
+## 📚 Jupyter Notebooks
 
-### Dataset Size
-- **Risk:** If dataset < 200 images per class
-- **Solution:** Aggressively augment using OpenCV (flips, rotation, brightness jitter) on Day 1
+Explore the project with detailed notebooks:
 
-### Webcam Lighting
-- **Risk:** Poor lighting causes unstable detections
-- **Solution:** Test lighting setup early on Day 3; maintain consistent background
+### 1. **01_eda.ipynb** — Exploratory Data Analysis
+- Dataset statistics (image counts, class balance)
+- Sample image visualizations
+- Feature distributions (LBP, edge density)
+- Class separability analysis
+- Preprocessing step visualization
 
-### Streamlit Webcam Issues
-- **Risk:** Webcam capture may be problematic in Streamlit
-- **Solution:** Use pure OpenCV demo as fallback (20 lines, always reliable)
+### 2. **02_preprocessing.ipynb** — Preprocessing Validation
+- Preprocessing pipeline walkthrough
+- Before/after image comparisons
+- Augmentation techniques (if needed)
+- Batch processing verification
+
+### 3. **03_model_training.ipynb** — Model Training
+- Feature loading and scaling
+- Individual model training walkthrough
+- GridSearchCV process for SVM
+- Training time measurements
+- Validation accuracy comparison
+
+### 4. **04_evaluation.ipynb** — Evaluation & Error Analysis
+- Test set evaluation
+- Confusion matrix interpretation
+- ROC curve analysis
+- Error case visualization
+- Failure mode analysis
+- Improvement recommendations
 
 ---
 
-## 📚 Key References
+## 🚨 Risk Mitigations & Troubleshooting
 
-- **OpenCV Documentation:** https://docs.opencv.org/
-- **scikit-learn:** https://scikit-learn.org/stable/
-- **scikit-image LBP:** https://scikit-image.org/docs/stable/api/skimage.feature.html#local_binary_pattern
-- **Streamlit:** https://docs.streamlit.io/
-- **Kaggle Datasets:** https://www.kaggle.com/datasets
+### Dataset Size
+- **Risk:** Dataset too small (< 300 images per class)
+- **Solution:** Use OpenCV augmentation (flips, rotation, brightness jitter)
+
+### Webcam Issues
+- **Risk:** Streamlit camera_input instability
+- **Solution:** Fall back to pure OpenCV demo (`python src/demo_live.py`)
+
+### Poor Lighting Conditions
+- **Risk:** Unstable real-time predictions
+- **Solution:** Test lighting setup early; maintain consistent background
+
+### GPU/Memory Constraints
+- **Risk:** Slow model training or evaluation
+- **Solution:** Reduce image batch size; use smaller dataset split for development
+
+### Model Performance
+- **Risk:** SVM or RF underperforming expectations
+- **Solution:** Revisit feature engineering; check data quality; tune hyperparameters further
+
+---
+
+## 📖 Usage Examples
+
+### 1. Train Models from Scratch
+```bash
+# Preprocess dataset
+python src/preprocessing.py
+
+# Extract features
+python src/feature_extraction.py
+
+# Train all models
+python src/train.py
+
+# Evaluate on test set
+python src/evaluate.py
+```
+
+### 2. Use Pre-Trained Models
+```python
+import joblib
+import cv2
+from src.preprocessing import preprocess_image
+from src.feature_extraction import extract_all_features
+
+# Load scaler and model
+scaler = joblib.load('models/scaler.pkl')
+model = joblib.load('models/svm.pkl')
+
+# Predict on new image
+img = cv2.imread('test_image.jpg')
+gray, edges = preprocess_image(img)
+features = extract_all_features(gray, edges)
+features_scaled = scaler.transform([features])
+prediction = model.predict(features_scaled)
+confidence = model.predict_proba(features_scaled).max()
+
+print(f"Prediction: {'Defective' if prediction[0] == 1 else 'Normal'}")
+print(f"Confidence: {confidence:.2%}")
+```
+
+### 3. Run Streamlit Application
+```bash
+streamlit run app.py
+```
+
+Navigate to: `http://localhost:8501`
+
+---
+
+## 📚 Dependencies
+
+All required packages are listed in `requirements.txt`:
+
+```
+opencv-python==4.8.0.74
+scikit-image==0.21.0
+scikit-learn==1.3.0
+numpy==1.24.3
+pandas==2.0.3
+matplotlib==3.7.1
+seaborn==0.12.2
+streamlit==1.25.0
+plotly==5.13.0
+joblib==1.3.1
+```
+
+Install all at once:
+```bash
+pip install -r requirements.txt
+```
 
 ---
 
 ## 👥 Team Collaboration
 
-This project is designed for a 4-person team with clear role separation:
+This project is developed by a 4-person team with clear role separation:
 
-| Role | Responsibility |
-|------|-----------------|
-| **M1 — Data & Preprocessing** | Dataset setup, OpenCV pipeline, augmentation |
-| **M2 — Feature Engineering** | LBP extraction, edge density, feature vectors |
-| **M3 — ML Models** | KNN, SVM, RF training, GridSearch, evaluation |
-| **M4 — Evaluation & Demo** | Metrics, Streamlit UI, webcam demo, presentation |
+| Member | Role | Pages | Responsibilities |
+|--------|------|-------|------------------|
+| **Ifra** | Lead & Data Pipeline | Predict | Repo setup, preprocessing, app shell |
+| **Faiqa** | Feature Engineering | Live Demo | LBP extraction, EDA, live webcam |
+| **Ayesha** | Model Training | Model Compare | Training, GridSearch, model metrics |
+| **Wajiha** | Evaluation | Metrics | Evaluation, error analysis, ROC curves |
 
----
-
-## 📝 License
-
-This project is open source and available under the MIT License.
+For detailed responsibilities, see **[team_roles.md](team_roles.md)**.
 
 ---
 
-## 🤝 Contributing
+## 📊 Key Insights
 
-Contributions are welcome! Please follow these guidelines:
+### Why This Architecture?
+
+1. **OpenCV Preprocessing**
+   - Proven effective for crack detection
+   - Canny edges specifically highlight linear structures (cracks)
+
+2. **Local Binary Patterns (LBP)**
+   - Classical texture descriptor, effective for surface defects
+   - Computationally efficient (no deep learning overhead)
+   - Interpretable — shows what features matter
+
+3. **Multiple Classifiers**
+   - Comparison reveals which algorithm suits the data best
+   - SVM RBF kernel handles non-linear patterns without overfitting
+
+4. **Streamlit UI**
+   - Interactive web app with zero frontend knowledge needed
+   - Live demo directly addresses the use case
+   - Error gallery provides transparency into failure modes
+
+---
+
+## 🎓 Learning Outcomes
+
+Participants will master:
+- ✅ Full OpenCV preprocessing pipeline for computer vision
+- ✅ Classical feature engineering (LBP, edge analysis)
+- ✅ Classical ML model training and hyperparameter optimization
+- ✅ Model evaluation beyond accuracy (precision, recall, ROC-AUC)
+- ✅ Error analysis and debugging ML systems
+- ✅ Building interactive web applications with Streamlit
+- ✅ Real-time video processing and prediction
+- ✅ End-to-end ML project management and team collaboration
+
+---
+
+## 📝 References
+
+- **OpenCV Documentation:** https://docs.opencv.org/
+- **scikit-learn:** https://scikit-learn.org/stable/
+- **scikit-image LBP:** https://scikit-image.org/docs/stable/api/skimage.feature.html
+- **Streamlit Documentation:** https://docs.streamlit.io/
+- **Plotly:** https://plotly.com/python/
+- **Kaggle Datasets:** https://www.kaggle.com/datasets
+
+---
+
+## 📞 Support & Contribution
+
+### Issues & Bugs
+- Open an issue on GitHub with:
+  - Clear description of the problem
+  - Steps to reproduce
+  - Expected vs actual behavior
+  - Screenshots if applicable
+
+### Contributing
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/improvement`)
-3. Commit changes (`git commit -am 'Add new feature'`)
-4. Push to branch (`git push origin feature/improvement`)
-5. Open a Pull Request
+2. Create feature branch: `git checkout -b feature/your-feature`
+3. Commit changes: `git commit -am 'Add feature description'`
+4. Push to branch: `git push origin feature/your-feature`
+5. Open Pull Request with detailed description
 
 ---
 
-## 📞 Support
+## 📄 License
 
-For questions or issues, please open a GitHub Issue in the repository.
+This project is open source and available under the **MIT License**. See LICENSE file for details.
 
 ---
 
 ## ✨ Acknowledgments
 
-This project implements a classical machine learning approach to visual quality inspection, combining traditional computer vision techniques (OpenCV, LBP) with modern ML frameworks (scikit-learn) for practical defect detection applications.
+VisionInspect AI combines classical computer vision techniques (OpenCV, LBP) with modern ML frameworks (scikit-learn, Streamlit) to create a practical quality inspection solution. This approach demonstrates that sophisticated ML systems don't always require deep learning — domain expertise and well-engineered features can be equally powerful.
+
+---
+
+## 📋 Project Checklist
+
+- [ ] Dataset downloaded and organized
+- [ ] Virtual environment created and activated
+- [ ] Dependencies installed (`pip install -r requirements.txt`)
+- [ ] Preprocessing pipeline tested on sample images
+- [ ] Features extracted and scaler saved
+- [ ] All 3 models trained and saved
+- [ ] Evaluation metrics computed
+- [ ] Streamlit app running without errors
+- [ ] All 4 pages functional
+- [ ] Webcam demo tested and stable
+- [ ] README reviewed and team trained
+- [ ] GitHub repo cleaned up and ready to share
+- [ ] Presentation prepared and rehearsed
 
 ---
 
 **Last Updated:** 2026-05-15  
 **Project Status:** Development in Progress  
-**Version:** 1.0.0
+**Version:** 1.0.0  
+**Team:** Ifra, Faiqa, Ayesha, Wajiha  
+
+---
+
+*For team-specific responsibilities and implementation timeline, see [team_roles.md](team_roles.md)*
