@@ -75,3 +75,5 @@ features.csv
 *.tmp
 *.temp
 .cache/
+
+kaggle.json
