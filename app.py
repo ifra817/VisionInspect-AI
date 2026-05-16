@@ -3,17 +3,27 @@ VisionInspect AI — Main Application Entry Point
 """
 
 import streamlit as st
+
 def load_css():
     with open("style.css", encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
+# 1. Page Configuration (Must be the very first Streamlit command)
 st.set_page_config(
     page_title="VisionInspect AI",
     page_icon="🔍",
     layout="wide",
     initial_sidebar_state="expanded",
 )
-# Handle URL query parameters for navigation
+
+# 2. Initialize Session States Safely
+if "current_page" not in st.session_state:
+    st.session_state.current_page = "Home"
+
+if "selected_model" not in st.session_state:
+    st.session_state.selected_model = "SVM"
+
+# 3. Handle URL query parameters for navigation
 query_params = st.query_params
 if "page" in query_params:
     page = query_params["page"]
@@ -26,12 +36,13 @@ if "page" in query_params:
 
 load_css()
 
-if "current_page" not in st.session_state:
-    st.session_state.current_page = "Home"
+# 4. Navigation Callback to sync widget states flawlessly
+def on_nav_change():
+    st.session_state.current_page = st.session_state.nav_radio
 
-if "selected_model" not in st.session_state:
-    st.session_state.selected_model = "SVM"
-
+# ============================================================================
+# SIDEBAR NAVIGATION & CONTROLS
+# ============================================================================
 with st.sidebar:
     st.markdown("""
     <div style="margin-bottom: 1.25rem;">
@@ -59,25 +70,22 @@ with st.sidebar:
 
     PAGES = ["Home", "Analyse", "About"]
 
-    # Safe index lookup
-    current_index = 0
-    if st.session_state.current_page in PAGES:
-        current_index = PAGES.index(st.session_state.current_page)
-    else:
-        st.session_state.current_page = "Home"  # Reset to Home if invalid
-        current_index = 0
+    # Safe index lookup for smooth rendering
+    if st.session_state.current_page not in PAGES:
+        st.session_state.current_page = "Home"
+    current_index = PAGES.index(st.session_state.current_page)
 
-    selected = st.radio(
+    # Using an on_change callback prevents the widget sync-lag
+    st.radio(
         label="nav",
         options=PAGES,
         index=current_index,
         label_visibility="collapsed",
         key="nav_radio",
+        on_change=on_nav_change
     )
-    st.session_state.current_page = selected
 
     st.divider()
-
     st.markdown('<p class="vi-nav-label">Active Model</p>', unsafe_allow_html=True)
 
     MODEL_OPTIONS = ["KNN", "SVM", "Random Forest"]
@@ -91,7 +99,6 @@ with st.sidebar:
     )
 
     st.divider()
-
     st.markdown('<p class="vi-nav-label">Model Stats</p>', unsafe_allow_html=True)
 
     col_a, col_b = st.columns(2)
@@ -101,7 +108,6 @@ with st.sidebar:
         st.metric(label="Precision", value="88.5%", delta="-1.2%")
 
     st.divider()
-
     st.markdown("""
     <div style="
         font-family: 'Inter', sans-serif;
@@ -114,26 +120,29 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
-
+# ============================================================================
+# DYNAMIC VIEW LOADER ENGINE
+# ============================================================================
 def _load(name: str) -> None:
     try:
         if name == "Home":
             from views import home
             home.show()
         elif name == "Analyse":
-            from views import analyse
-            analyse.show()
+            # Directing this safely to views/predict.py where your CV pipeline is fixed
+            from views import predict
+            predict.show()
         elif name == "About":
             from views import about
             about.show()
     except ModuleNotFoundError as exc:
         st.error(f"View not found — {exc}")
-        st.caption("Make sure the module exists inside the `views/` folder.")
+        st.caption("Make sure the file exists inside your `views/` folder.")
     except Exception as exc:
         st.error(f"Failed to load view — {exc}")
         raise
 
-
+# Render active page view
 _load(st.session_state.current_page)
 
 st.divider()

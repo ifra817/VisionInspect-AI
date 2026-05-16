@@ -1,146 +1,118 @@
 """
-🔍 Predict Page - VisionInspect AI
+🔍 Predict/Analysis Page - VisionInspect AI
 """
 
 import streamlit as st
 import cv2
 import numpy as np
-import pickle
+import joblib
 import os
+import tempfile
 from PIL import Image
+from pathlib import Path
+from typing import Any
 
+# Bring in your exact pipeline from src
+from src.predict import load_inference_pipeline
+from src.preprocessing import preprocess_image
+from src.feature_extraction import extract_all_features
 
 # ============================================================================
-# MODEL / PIPELINE LOADING
+# PIPELINE CONFIGURATION
 # ============================================================================
+
+CLASS_NAMES = {0: "NORMAL", 1: "DEFECTIVE"}
+
+def run_prediction_pipeline(file_path: str, model_name: str, scaler: Any):
+    """
+    Leverages the exact logic used in the CLI by passing a real file path string.
+    This completely prevents the pathlib crash inside src/preprocessing.py.
+    """
+    # 1. Run through your real src preprocessing (takes a file path string)
+    preprocessed_img, edge_map = preprocess_image(file_path)
+    
+    # 2. Extract the true 42 features
+    features = extract_all_features(preprocessed_img, edge_map)
+    
+    # 3. Scale and format for the model
+    features_2d = features.reshape(1, -1)
+    features_scaled = scaler.transform(features_2d)
+    
+    # 4. Load the active model from session state
+    models_dict = load_cached_models()
+    model = models_dict[model_name]
+    
+    prediction = int(model.predict(features_scaled)[0])
+    label = CLASS_NAMES[prediction]
+    
+    confidence = 0.85 # Fallback
+    if hasattr(model, "predict_proba"):
+        probabilities = model.predict_proba(features_scaled)[0]
+        confidence = float(np.max(probabilities))
+        
+    return label, confidence, preprocessed_img, edge_map
 
 @st.cache_resource
-def load_models():
+def load_cached_models():
+    """Cache models in memory for smooth UI performance."""
     models = {}
     paths = {"KNN": "models/knn.pkl", "SVM": "models/svm.pkl", "Random Forest": "models/rf.pkl"}
     for name, path in paths.items():
         if os.path.exists(path):
-            with open(path, "rb") as f:
-                models[name] = pickle.load(f)
+            models[name] = joblib.load(path)
     return models
 
-
 @st.cache_resource
-def load_scaler():
+def load_cached_scaler():
+    """Cache scaler in memory."""
     path = "models/scaler.pkl"
     if os.path.exists(path):
-        with open(path, "rb") as f:
-            return pickle.load(f)
+        return joblib.load(path)
     return None
 
-
 # ============================================================================
-# IMAGE HELPERS
-# ============================================================================
-
-def file_to_bgr(uploaded_file):
-    """Convert a Streamlit UploadedFile to a BGR numpy array."""
-    try:
-        img = Image.open(uploaded_file).convert("RGB")
-        return cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
-    except Exception as e:
-        st.error(f"Could not load image: {e}")
-        return None
-
-
-def preprocess(image_bgr):
-    """Return (gray, blurred, edges) all at 128×128."""
-    resized  = cv2.resize(image_bgr, (128, 128))
-    gray     = cv2.cvtColor(resized, cv2.COLOR_BGR2GRAY)
-    blurred  = cv2.GaussianBlur(gray, (5, 5), 0)
-    edges    = cv2.Canny(blurred, 50, 150)
-    return resized, gray, blurred, edges
-
-
-def extract_features(gray, edges):
-    """
-    Placeholder feature extractor.
-    ⚠️  Replace with the real logic from src/feature_extraction.py once ready.
-    Output shape must match what the trained models expect.
-    """
-    feats = [
-        np.mean(gray), np.std(gray), float(np.min(gray)), float(np.max(gray)),
-        np.mean(edges), float(np.sum(edges > 0)),
-    ]
-    hist = cv2.calcHist([gray], [0], None, [16], [0, 256]).flatten()[:8]
-    feats.extend(hist.tolist())
-    return np.array(feats).reshape(1, -1)
-
-
-def run_prediction(image_bgr, model, scaler):
-    """Full pipeline → (label_str, confidence_float, resized, gray, blurred, edges)."""
-    resized, gray, blurred, edges = preprocess(image_bgr)
-    features = extract_features(gray, edges)
-
-    if scaler is not None:
-        try:
-            features = scaler.transform(features)
-        except Exception:
-            pass
-
-    prediction = model.predict(features)[0]
-
-    try:
-        confidence = float(np.max(model.predict_proba(features)))
-    except Exception:
-        confidence = 0.85
-
-    label = "DEFECTIVE" if prediction == 1 else "NORMAL"
-    return label, confidence, resized, gray, blurred, edges
-
-
-# ============================================================================
-# PAGE
+# UI RENDERING
 # ============================================================================
 
 def show():
-
-    # ── Page header ───────────────────────────────────────────────────────────
     st.markdown("""
     <div class="vi-page-title">🔍 Predict <span>Defects</span></div>
     <div class="vi-page-subtitle">
-        Upload or capture a smartphone image — the pipeline handles the rest.
+        Upload or capture a smartphone image — the computer vision pipeline handles the rest.
     </div>
     """, unsafe_allow_html=True)
 
-    # ── Load assets ───────────────────────────────────────────────────────────
-    models = load_models()
-    scaler = load_scaler()
+    models = load_cached_models()
+    scaler = load_cached_scaler()
 
-    if not models:
-        st.warning("No trained models found in `models/`. Train the models first.")
+    if not models or scaler is None:
+        st.warning("⚠️ Trained models or feature scalers are missing from the `models/` directory.")
         return
 
-    # Active model comes from the global sidebar selector (app.py)
-    model_name = st.session_state.get("selected_model", "SVM")
-    if model_name not in models:
-        st.error(f"Model '{model_name}' not loaded. Check `models/{model_name.lower().replace(' ', '_')}.pkl`.")
-        return
+    model_name = st.session_state.get("selected_model", "Random Forest")
+    if model_name == "rf": model_name = "Random Forest"
+    elif model_name == "svm": model_name = "SVM"
+    elif model_name == "knn": model_name = "KNN"
 
-    model = models[model_name]
-
-    # ── Confidence threshold (page-local setting only) ────────────────────────
     with st.expander("⚙️ Prediction settings", expanded=False):
         conf_threshold = st.slider(
             "Confidence threshold",
             min_value=0.50, max_value=1.0, value=0.70, step=0.05,
-            help="Warn when model confidence falls below this value.",
+            help="Flag alerts when model confidence falls below this threshold value."
         )
 
     st.divider()
 
-    # ── Two-column layout ─────────────────────────────────────────────────────
     col_input, col_result = st.columns(2, gap="large")
+    
+    # Store uploaded raw bytes safely
+    uploaded_file_buffer = None
+    display_image = None
 
-    # LEFT: image input
+    # LEFT COLUMN: Handle Inputs safely
     with col_input:
-        st.markdown('<div class="vi-section-label">Input Image</div>', unsafe_allow_html=True)
-
+        st.markdown('<div class="vi-section-label">Input Image Source</div>', unsafe_allow_html=True)
+        
         method = st.radio(
             "input_method",
             ["📁 Upload File", "📷 Camera Snapshot"],
@@ -148,43 +120,54 @@ def show():
             label_visibility="collapsed",
         )
 
-        image_bgr = None
-
         if method == "📁 Upload File":
             uploaded = st.file_uploader(
                 "Drop image here",
                 type=["jpg", "jpeg", "png"],
                 label_visibility="collapsed",
             )
-            if uploaded:
-                image_bgr = file_to_bgr(uploaded)
-
-        else:  # Camera
+            if uploaded is not None:
+                display_image = uploaded
+                uploaded_file_buffer = uploaded.getvalue()
+        else:
             snap = st.camera_input("Take a photo", label_visibility="collapsed")
-            if snap:
-                image_bgr = file_to_bgr(snap)
+            if snap is not None:
+                display_image = snap
+                uploaded_file_buffer = snap.getvalue()
 
-        if image_bgr is not None:
-            st.markdown('<div class="vi-section-label" style="margin-top:1rem;">Original</div>',
-                        unsafe_allow_html=True)
-            st.image(cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB), use_column_width=True)
+        if display_image is not None:
+            st.markdown('<div class="vi-section-label" style="margin-top:1rem;">Original View</div>', unsafe_allow_html=True)
+            st.image(display_image, use_container_width=True)
 
-    # RIGHT: prediction result
+    # RIGHT COLUMN: Show Prediction Engine Results
     with col_result:
-        st.markdown('<div class="vi-section-label">Result</div>', unsafe_allow_html=True)
+        st.markdown('<div class="vi-section-label">Analysis Result</div>', unsafe_allow_html=True)
 
-        if image_bgr is None:
+        if uploaded_file_buffer is None:
             st.markdown("""
             <div class="vi-card" style="text-align:center; padding:2.5rem 1rem; color:var(--text-muted);">
-                Upload or capture an image to see the prediction here.
+                Provide an image source on the left to activate processing.
             </div>
             """, unsafe_allow_html=True)
         else:
-            with st.spinner("Analysing…"):
-                label, conf, resized, gray, blurred, edges = run_prediction(image_bgr, model, scaler)
+            with st.spinner("Executing Feature Extraction & Inference..."):
+                # Create a temporary file on disk to get a real string path
+                with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_file:
+                    temp_file.write(uploaded_file_buffer)
+                    temp_file_path = temp_file.name
+
+                try:
+                    # Pass the real path string down the stream
+                    label, conf, preprocessed_img, edge_map = run_prediction_pipeline(
+                        temp_file_path, model_name, scaler
+                    )
+                finally:
+                    # Clean up the disk file safely after inference completes
+                    if os.path.exists(temp_file_path):
+                        os.remove(temp_file_path)
 
             badge_cls = "normal" if label == "NORMAL" else "defective"
-            icon      = "🟢" if label == "NORMAL" else "🔴"
+            icon = "🟢" if label == "NORMAL" else "🔴"
 
             st.markdown(f"""
             <div class="vi-card" style="padding: 1.5rem;">
@@ -193,11 +176,10 @@ def show():
                 </div>
                 <div style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:0.4rem;">
                     Confidence &nbsp;
-                    <span style="font-family:var(--font-display);
-                                 color:var(--accent); font-weight:700;">
+                    <span style="font-family:var(--font-display); color:var(--accent); font-weight:700;">
                         {conf*100:.1f}%
                     </span>
-                    &nbsp;·&nbsp; Model: <strong>{model_name}</strong>
+                    &nbsp;·&nbsp; Engine: <strong>{model_name}</strong>
                 </div>
             </div>
             """, unsafe_allow_html=True)
@@ -205,68 +187,55 @@ def show():
             st.progress(float(conf))
 
             if conf < conf_threshold:
-                st.warning(
-                    f"Confidence ({conf*100:.1f}%) is below your threshold "
-                    f"({conf_threshold*100:.0f}%). Consider re-capturing the image."
-                )
+                st.warning(f"⚠️ Low Confidence warning: Result ({conf*100:.1f}%) sits below your threshold specification.")
             else:
-                st.success("Confidence above threshold ✓")
+                st.success("Analysis confidence parameters met ✓")
 
-    # ── Preprocessing visualisation (full width) ──────────────────────────────
-    if image_bgr is not None:
+    # LOWER SECTION: Pipeline Stage Visualization
+    if uploaded_file_buffer is not None:
         st.divider()
-        st.markdown('<div class="vi-section-label">Preprocessing Pipeline</div>',
-                    unsafe_allow_html=True)
+        st.markdown('<div class="vi-section-label">Handcrafted Feature Preprocessing Stages</div>', unsafe_allow_html=True)
 
-        _, gray, blurred, edges = preprocess(image_bgr)
-        resized_rgb = cv2.cvtColor(cv2.resize(image_bgr, (128, 128)), cv2.COLOR_BGR2RGB)
-
-        p1, p2, p3, p4 = st.columns(4, gap="small")
+        p1, p2 = st.columns(2, gap="medium")
         with p1:
-            st.image(resized_rgb,          caption="① Original 128×128", use_column_width=True)
+            st.image(preprocessed_img, caption="1. Normalized Grayscale (128x128)", use_container_width=True)
         with p2:
-            st.image(Image.fromarray(gray),    caption="② Grayscale",       use_column_width=True)
-        with p3:
-            st.image(Image.fromarray(blurred), caption="③ Gaussian Blur",   use_column_width=True)
-        with p4:
-            st.image(Image.fromarray(edges),   caption="④ Canny Edges",     use_column_width=True)
+            st.image(edge_map, caption="2. Structural Canny Edge Map Extract", use_container_width=True)
 
-    # ── Batch prediction ──────────────────────────────────────────────────────
+    # BATCH EXTRACTIONS
     st.divider()
-    st.markdown('<div class="vi-section-label">Batch Prediction</div>', unsafe_allow_html=True)
-
-    with st.expander("Predict multiple images at once"):
+    st.markdown('<div class="vi-section-label">Batch Testing Utility</div>', unsafe_allow_html=True)
+    with st.expander("Process bulk directory evaluations"):
         batch_files = st.file_uploader(
-            "Upload images",
+            "Upload multiple testing instances",
             type=["jpg", "jpeg", "png"],
             accept_multiple_files=True,
             label_visibility="collapsed",
-            key="batch_uploader",
+            key="batch_uploader"
         )
-
-        if batch_files and st.button("🚀 Run Batch", key="batch_run"):
+        if batch_files and st.button("🚀 Execute Batch Run", key="batch_run"):
             results = []
             bar = st.progress(0)
-
             for i, f in enumerate(batch_files):
-                img = file_to_bgr(f)
-                if img is not None:
-                    lbl, c, *_ = run_prediction(img, model, scaler)
+                f_buffer = f.getvalue()
+                with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as t_file:
+                    t_file.write(f_buffer)
+                    t_path = t_file.name
+                
+                try:
+                    lbl, c, *_ = run_prediction_pipeline(t_path, model_name, scaler)
                     results.append({
-                        "File":       f.name,
-                        "Prediction": lbl,
-                        "Confidence": f"{c*100:.1f}%",
+                        "File Target": f.name,
+                        "Inference Label": lbl,
+                        "Confidence Index": f"{c*100:.1f}%"
                     })
+                finally:
+                    if os.path.exists(t_path):
+                        os.remove(t_path)
+                        
                 bar.progress((i + 1) / len(batch_files))
-
             bar.empty()
-
-            if results:
-                st.success(f"Processed {len(results)} image(s).")
-                st.dataframe(results, use_container_width=True)
-            else:
-                st.error("No successful predictions.")
-
+            st.dataframe(results, use_container_width=True)
 
 if __name__ == "__main__":
     show()
