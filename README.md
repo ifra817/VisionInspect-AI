@@ -24,6 +24,7 @@ Images → OpenCV Preprocessing → Feature Extraction (LBP + Edge Density)
 - ✅ Real-time webcam-based defect detection
 - ✅ Comprehensive model evaluation with error analysis
 - ✅ Beautiful visualizations with Plotly and Seaborn
+- ✅ Efficient Colab-based model training
 
 ---
 
@@ -74,6 +75,36 @@ data/
 | **Interactive Charts** | Plotly | Interactive ROC curves & bar charts | 5.13.0+ |
 | **Web Framework** | Streamlit | Multi-page interactive web application | 1.25.0+ |
 | **Model Persistence** | joblib | Save/load trained models & scalers | 1.3.0+ |
+
+---
+
+## 💻 Colab Training Workflow
+
+Since model training happens on **Google Colab** (more efficient for heavy computations), follow this two-phase process:
+
+### Phase 1: Training (Ayesha in Colab)
+1. Upload dataset to Google Drive or Kaggle
+2. Run preprocessing pipeline (Ifra's `src/preprocessing.py`)
+3. Extract features → save `features.csv` (Faiqa's `src/feature_extraction.py`)
+4. Train 3 models → save `.pkl` files (Ayesha's `src/train.py`)
+5. Run evaluation → save results (Wajiha's `src/evaluate.py`)
+6. **Download all `.pkl` and result files to local `models/` and `results/` folders**
+7. Push to GitHub (Ifra merges to `develop` → `main`)
+
+### Phase 2: Local Usage (Everyone else - Streamlit Development)
+1. Clone repo with **pre-trained models already in `models/` folder**
+2. Run `pip install -r requirements.txt`
+3. Run `streamlit run app.py`
+4. **All pages load pre-trained models — no training needed locally!**
+5. Focus on UI/UX, visualization, and presentation
+
+**Benefits:**
+- ✅ Laptops stay light (no heavy training)
+- ✅ Faster iteration on UI/visualization
+- ✅ Colab handles GPU-intensive tasks
+- ✅ Everyone can work in parallel
+
+For detailed Colab setup guide, see **[COLAB_WORKFLOW.md](COLAB_WORKFLOW.md)**.
 
 ---
 
@@ -144,7 +175,7 @@ The project includes a **4-page Streamlit web application** with comprehensive v
 - pip package manager
 - Git
 
-### Installation
+### Installation (Local)
 
 1. **Clone the repository**
    ```bash
@@ -168,10 +199,15 @@ The project includes a **4-page Streamlit web application** with comprehensive v
    pip install -r requirements.txt
    ```
 
-4. **Download dataset**
-   - Download "Cracked and Intact Smartphone Images Dataset" from Kaggle
-   - Extract and organize into `data/train/`, `data/val/`, `data/test/` structure
-   - Subfolder structure: `normal/` and `defective/`
+4. **Download pre-trained models** (after Ayesha completes Colab training)
+   - Ayesha downloads trained models from Colab
+   - Place in `models/` folder:
+     - `models/scaler.pkl`
+     - `models/knn.pkl`
+     - `models/svm.pkl`
+     - `models/rf.pkl`
+     - `models/metadata.pkl`
+   - Evaluation results in `results/` folder
 
 5. **Run the Streamlit application**
    ```bash
@@ -235,6 +271,7 @@ VisionInspect-AI/
 ├── app.py                        # Main Streamlit application
 ├── requirements.txt              # Python dependencies
 ├── .gitignore                    # Git ignore rules
+├── COLAB_WORKFLOW.md             # Colab training guide
 ├── README.md                     # This file
 ├── team_roles.md                 # Team responsibilities & assignments
 └── LICENSE                       # Project license
@@ -343,7 +380,7 @@ Three classifiers are trained, evaluated, and compared for optimal performance:
 ```python
 from src.train import train_all_models
 
-# Train all three models
+# Train all three models (runs in Colab)
 train_all_models(X_train, y_train, X_val, y_val)
 # Outputs: knn.pkl, svm.pkl, rf.pkl, metadata.pkl
 ```
@@ -528,7 +565,7 @@ Explore the project with detailed notebooks:
 
 ### GPU/Memory Constraints
 - **Risk:** Slow model training or evaluation
-- **Solution:** Reduce image batch size; use smaller dataset split for development
+- **Solution:** Use Colab for training; download pre-trained models locally
 
 ### Model Performance
 - **Risk:** SVM or RF underperforming expectations
@@ -538,7 +575,9 @@ Explore the project with detailed notebooks:
 
 ## 📖 Usage Examples
 
-### 1. Train Models from Scratch
+### 1. Training Models (Colab - Ayesha)
+See [COLAB_WORKFLOW.md](COLAB_WORKFLOW.md) for detailed Colab setup
+
 ```bash
 # Preprocess dataset
 python src/preprocessing.py
@@ -553,7 +592,7 @@ python src/train.py
 python src/evaluate.py
 ```
 
-### 2. Use Pre-Trained Models
+### 2. Use Pre-Trained Models (Local - Everyone)
 ```python
 import joblib
 import cv2
@@ -576,7 +615,7 @@ print(f"Prediction: {'Defective' if prediction[0] == 1 else 'Normal'}")
 print(f"Confidence: {confidence:.2%}")
 ```
 
-### 3. Run Streamlit Application
+### 3. Run Streamlit Application (Local - Everyone)
 ```bash
 streamlit run app.py
 ```
@@ -600,6 +639,7 @@ seaborn==0.12.2
 streamlit==1.25.0
 plotly==5.13.0
 joblib==1.3.1
+Pillow==10.0.0
 ```
 
 Install all at once:
@@ -617,7 +657,7 @@ This project is developed by a 4-person team with clear role separation:
 |--------|------|-------|------------------|
 | **Ifra** | Lead & Data Pipeline | Predict | Repo setup, preprocessing, app shell |
 | **Faiqa** | Feature Engineering | Live Demo | LBP extraction, EDA, live webcam |
-| **Ayesha** | Model Training | Model Compare | Training, GridSearch, model metrics |
+| **Ayesha** | Model Training | Model Compare | Colab training, GridSearch, model metrics |
 | **Wajiha** | Evaluation | Metrics | Evaluation, error analysis, ROC curves |
 
 For detailed responsibilities, see **[team_roles.md](team_roles.md)**.
@@ -646,6 +686,11 @@ For detailed responsibilities, see **[team_roles.md](team_roles.md)**.
    - Live demo directly addresses the use case
    - Error gallery provides transparency into failure modes
 
+5. **Colab-based Training**
+   - Keeps local machines lightweight
+   - Leverages free GPU resources
+   - Enables parallel UI development
+
 ---
 
 ## 🎓 Learning Outcomes
@@ -659,6 +704,7 @@ Participants will master:
 - ✅ Building interactive web applications with Streamlit
 - ✅ Real-time video processing and prediction
 - ✅ End-to-end ML project management and team collaboration
+- ✅ Cloud-based training workflows (Google Colab)
 
 ---
 
@@ -670,6 +716,7 @@ Participants will master:
 - **Streamlit Documentation:** https://docs.streamlit.io/
 - **Plotly:** https://plotly.com/python/
 - **Kaggle Datasets:** https://www.kaggle.com/datasets
+- **Google Colab Guide:** https://colab.research.google.com/
 
 ---
 
@@ -699,7 +746,7 @@ This project is open source and available under the **MIT License**. See LICENSE
 
 ## ✨ Acknowledgments
 
-VisionInspect AI combines classical computer vision techniques (OpenCV, LBP) with modern ML frameworks (scikit-learn, Streamlit) to create a practical quality inspection solution. This approach demonstrates that sophisticated ML systems don't always require deep learning — domain expertise and well-engineered features can be equally powerful.
+VisionInspect AI combines classical computer vision techniques (OpenCV, LBP) with modern ML frameworks (scikit-learn, Streamlit) to create a practical quality inspection solution. This approach demonstrates that sophisticated ML systems don't always require deep learning — domain expertise and well-engineered features can be equally powerful. The Colab-based training workflow enables efficient resource utilization without expensive hardware.
 
 ---
 
@@ -708,10 +755,9 @@ VisionInspect AI combines classical computer vision techniques (OpenCV, LBP) wit
 - [ ] Dataset downloaded and organized
 - [ ] Virtual environment created and activated
 - [ ] Dependencies installed (`pip install -r requirements.txt`)
-- [ ] Preprocessing pipeline tested on sample images
-- [ ] Features extracted and scaler saved
-- [ ] All 3 models trained and saved
-- [ ] Evaluation metrics computed
+- [ ] **Colab training completed** (Ayesha)
+- [ ] Pre-trained models downloaded to `models/` folder
+- [ ] Evaluation results in `results/` folder
 - [ ] Streamlit app running without errors
 - [ ] All 4 pages functional
 - [ ] Webcam demo tested and stable
@@ -729,3 +775,5 @@ VisionInspect AI combines classical computer vision techniques (OpenCV, LBP) wit
 ---
 
 *For team-specific responsibilities and implementation timeline, see [team_roles.md](team_roles.md)*
+
+*For Colab training workflow, see [COLAB_WORKFLOW.md](COLAB_WORKFLOW.md)*
