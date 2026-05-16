@@ -1,0 +1,297 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Colours */
+    --c-accent:          #FF6B6B;
+    --c-accent-dim:      #E85555;
+    --c-accent-glow:     rgba(255, 107, 107, 0.15);
+    --c-success:         #00D4AA;
+    --c-success-dim:     rgba(0, 212, 170, 0.12);
+    --c-info:            #4A9EFF;
+    --c-warning:         #FFD43B;
+
+    /* Backgrounds */
+    --c-bg:              #0A0E1A;
+    --c-surface:         #111827;
+    --c-elevated:        #1A2235;
+    --c-hover:           #1F2A40;
+
+    /* Borders */
+    --c-border:          rgba(255, 255, 255, 0.06);
+    --c-border-mid:      rgba(255, 255, 255, 0.12);
+    --c-border-accent:   rgba(255, 107, 107, 0.35);
+
+    /* Text — ADD THESE */
+    --c-text:            #E8EDF5;
+    --c-text-dim:        #6B7A99;
+    --c-text-muted:      #3D4A5C;
+    --text-primary:      #E8EDF5;
+    --text-secondary:    #6B7A99;
+    --text-dim:          #6B7A99;
+    --accent:            #FF6B6B;
+    --success:           #00D4AA;
+    --info:              #4A9EFF;
+    --font-display:      'Space Mono', monospace;
+    --font-body:         'Inter', sans-serif;
+
+    /* Typography */
+    --f-display:         'Space Mono', monospace;
+    --f-body:            'Inter', sans-serif;
+
+    /* Radii */
+    --r-sm:              6px;
+    --r-md:              10px;
+    --r-lg:              16px;
+
+    /* Shadows */
+    --s-card:            0 4px 20px rgba(0, 0, 0, 0.4);
+    --s-accent:          0 6px 28px rgba(255, 107, 107, 0.18);
+}
+
+html, body,
+[data-testid="stAppViewContainer"],
+[data-testid="stMainBlockContainer"] {
+    background-color: var(--c-bg) !important;
+    font-family: var(--f-body) !important;
+    color: var(--c-text) !important;
+}
+
+[data-testid="stMainBlockContainer"] {
+    padding: 2rem 2.5rem 3rem !important;
+    max-width: 1100px !important;
+}
+
+#MainMenu, footer, header { visibility: hidden; }
+
+[data-testid="stSidebar"] {
+    background: var(--c-surface) !important;
+    border-right: 1px solid var(--c-border-mid) !important;
+}
+
+[data-testid="stSidebar"] > div {
+    padding: 1.5rem 1.25rem !important;
+}
+
+[data-testid="stSidebar"] [data-testid="stRadio"] label {
+    font-family: var(--f-body) !important;
+    font-size: 0.875rem !important;
+    color: var(--c-text-dim) !important;
+    padding: 0.3rem 0 !important;
+    transition: color 0.15s;
+}
+
+[data-testid="stSidebar"] [data-testid="stRadio"] label:hover {
+    color: var(--c-text) !important;
+}
+
+[data-testid="stSidebar"] [data-testid="stSelectbox"] > div > div {
+    background: var(--c-elevated) !important;
+    border: 1px solid var(--c-border-mid) !important;
+    border-radius: var(--r-sm) !important;
+    color: var(--c-text) !important;
+    font-size: 0.875rem !important;
+}
+
+[data-testid="stMetric"] {
+    background: var(--c-elevated) !important;
+    border: 1px solid var(--c-border) !important;
+    border-radius: var(--r-sm) !important;
+    padding: 0.6rem 0.75rem !important;
+}
+
+[data-testid="stMetricLabel"] p {
+    font-size: 0.72rem !important;
+    color: var(--c-text-dim) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+}
+
+[data-testid="stMetricValue"] {
+    color: var(--c-accent) !important;
+    font-family: var(--f-display) !important;
+    font-size: 1rem !important;
+}
+
+.stButton > button {
+    background: linear-gradient(135deg, #FF6B6B 0%, #E85555 100%) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: var(--r-sm) !important;
+    font-family: var(--f-body) !important;
+    font-weight: 600 !important;
+    font-size: 0.875rem !important;
+    letter-spacing: 0.01em !important;
+    padding: 0.55rem 1.5rem !important;
+    transition: opacity 0.18s, transform 0.15s, box-shadow 0.18s !important;
+    box-shadow: var(--s-accent) !important;
+}
+
+.stButton > button:hover {
+    opacity: 0.88 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 32px rgba(255, 107, 107, 0.28) !important;
+}
+
+.stButton > button:active {
+    transform: translateY(0) !important;
+}
+
+hr, [data-testid="stDivider"] {
+    border-color: var(--c-border) !important;
+    margin: 1.25rem 0 !important;
+}
+
+[data-testid="stAlert"] {
+    background: var(--c-elevated) !important;
+    border-radius: var(--r-sm) !important;
+    border-left-width: 3px !important;
+    font-size: 0.875rem !important;
+}
+
+[data-testid="stProgressBar"] > div {
+    background: rgba(255, 107, 107, 0.15) !important;
+    border-radius: 99px !important;
+}
+
+[data-testid="stProgressBar"] > div > div {
+    background: linear-gradient(90deg, #FF6B6B, #E85555) !important;
+    border-radius: 99px !important;
+}
+
+[data-testid="stFileUploader"] {
+    background: var(--c-elevated) !important;
+    border: 1.5px dashed var(--c-border-accent) !important;
+    border-radius: var(--r-md) !important;
+}
+
+code, pre {
+    font-family: var(--f-display) !important;
+    font-size: 0.82em !important;
+    background: var(--c-elevated) !important;
+    border-radius: var(--r-sm) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SHARED COMPONENT CLASSES — ADD ALL MISSING ONES
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.vi-page-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #E8EDF5;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    margin: 0 0 0.5rem 0;
+}
+
+.vi-page-title span {
+    color: #FF6B6B;
+}
+
+.vi-page-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: #6B7A99;
+    margin: 0 0 2rem 0;
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+.vi-section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.15rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #FF6B6B;
+    margin: 0 0 1.5rem 0;
+    font-weight: 700;
+}
+.vi-card {
+    background: #111827;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin: 0.5rem 0;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vi-card:hover {
+    border-color: rgba(255, 107, 107, 0.3);
+    box-shadow: 0 6px 28px rgba(255, 107, 107, 0.12);
+}
+
+.vi-card.accent-left {
+    border-left: 3px solid #FF6B6B;
+    border-radius: 0 10px 10px 0;
+}
+
+.vi-tech-pill {
+    display: inline-block;
+    background: #1A2235;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #6B7A99;
+    padding: 0.35rem 0.85rem;
+    border-radius: 99px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    margin: 0.25rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.vi-stat {
+    background: #1A2235;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    padding: 1.1rem 1rem;
+    text-align: center;
+}
+
+.vi-stat-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #FF6B6B;
+    line-height: 1;
+    margin-bottom: 0.35rem;
+}
+
+.vi-stat-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    color: #6B7A99;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.vi-badge {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    border-radius: 99px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.vi-badge.normal {
+    background: rgba(0, 212, 170, 0.1);
+    color: #00D4AA;
+    border: 1px solid rgba(0, 212, 170, 0.28);
+}
+
+.vi-badge.defective {
+    background: rgba(255, 107, 107, 0.1);
+    color: #FF6B6B;
+    border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+.vi-nav-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #3D4A5C;
+    margin: 0 0 0.5rem 0;
+    padding: 0;
+}

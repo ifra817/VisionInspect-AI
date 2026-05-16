@@ -1,5 +1,5 @@
 """
-Home — VisionInspect AI
+Home — VisionInspect AI Landing Page
 """
 
 import streamlit as st
@@ -13,135 +13,139 @@ def show():
             padding-top: 0 !important;
         }
 
-        /* Animated scan line across hero */
-        @keyframes scanline {
-            0%   { top: 0%; opacity: 0; }
-            10%  { opacity: 1; }
-            90%  { opacity: 1; }
-            100% { top: 100%; opacity: 0; }
-        }
-
-        /* Subtle grid background */
         .vi-hero-bg {
             position: fixed;
             inset: 0;
             background-image:
-                linear-gradient(rgba(255,107,107,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,107,107,0.03) 1px, transparent 1px);
-            background-size: 48px 48px;
+                linear-gradient(rgba(255,107,107,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,107,107,0.02) 1px, transparent 1px);
+            background-size: 64px 64px;
             pointer-events: none;
             z-index: 0;
         }
 
         @keyframes pulse-glow {
-            0%, 100% { opacity: 0.5; transform: scale(1);   }
-            50%       { opacity: 0.8; transform: scale(1.05); }
+            0%, 100% { opacity: 0.4; transform: scale(1);   }
+            50%       { opacity: 0.7; transform: scale(1.08); }
         }
 
         .vi-glow-orb {
             position: fixed;
-            width: 600px;
-            height: 600px;
+            width: 700px;
+            height: 700px;
             border-radius: 50%;
             background: radial-gradient(circle,
-                rgba(255,107,107,0.07) 0%,
-                transparent 65%
+                rgba(255,107,107,0.08) 0%,
+                transparent 70%
             );
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             pointer-events: none;
             z-index: 0;
-            animation: pulse-glow 4s ease-in-out infinite;
+            animation: pulse-glow 5s ease-in-out infinite;
         }
 
-        /* Nav cards */
-        .vi-nav-card {
-            background: rgba(26, 34, 53, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 12px;
-            padding: 1.4rem 1rem;
-            text-align: center;
-            cursor: pointer;
-            transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
-            backdrop-filter: blur(8px);
-        }
-
-        .vi-nav-card:hover {
-            border-color: rgba(255, 107, 107, 0.5);
-            box-shadow: 0 0 24px rgba(255, 107, 107, 0.12);
-            transform: translateY(-3px);
-        }
-
-        .vi-nav-card-icon {
-            font-size: 1.6rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .vi-nav-card-title {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: #E8EDF5;
-            margin-bottom: 0.3rem;
-            letter-spacing: -0.01em;
-        }
-
-        .vi-nav-card-desc {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.75rem;
-            color: #6B7A99;
-            line-height: 1.5;
-        }
-
-        /* Stat row */
-        .vi-stat-inline {
-            text-align: center;
-            padding: 0.5rem;
-        }
-
-        .vi-stat-inline-num {
-            font-family: 'Space Mono', monospace;
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #FF6B6B;
-            line-height: 1;
-        }
-
-        .vi-stat-inline-lbl {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.7rem;
-            color: #3D4A5C;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-top: 0.25rem;
-        }
-
-        /* Tag pills in description */
-        .vi-tag {
-            display: inline-block;
-            background: rgba(255, 107, 107, 0.08);
-            border: 1px solid rgba(255, 107, 107, 0.2);
-            color: #FF6B6B;
-            padding: 0.15rem 0.6rem;
-            border-radius: 99px;
-            font-size: 0.72rem;
-            font-family: 'Space Mono', monospace;
-            margin: 0.15rem;
-        }
-
-        /* Divider line with glow */
         .vi-line {
             height: 1px;
             background: linear-gradient(
                 90deg,
                 transparent 0%,
-                rgba(255,107,107,0.3) 30%,
-                rgba(255,107,107,0.3) 70%,
+                rgba(255,107,107,0.4) 20%,
+                rgba(255,107,107,0.4) 80%,
                 transparent 100%
             );
-            margin: 0.5rem auto;
+            margin: 2rem auto;
             max-width: 600px;
+        }
+
+        .vi-feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 900px) {
+            .vi-feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .vi-feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .vi-feature-item {
+            background: rgba(26, 34, 53, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 1.75rem 1.5rem;
+            text-align: center;
+            transition: all 0.25s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .vi-feature-item:hover {
+            border-color: rgba(255, 107, 107, 0.3);
+            background: rgba(26, 34, 53, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .vi-feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .vi-feature-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #E8EDF5;
+            margin-bottom: 0.4rem;
+            letter-spacing: -0.01em;
+        }
+
+        .vi-feature-desc {
+            font-size: 0.82rem;
+            color: #6B7A99;
+            line-height: 1.6;
+        }
+
+        .vi-stat-item {
+            text-align: center;
+        }
+
+        .vi-stat-number {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #FF6B6B;
+            line-height: 1;
+            margin-bottom: 0.35rem;
+        }
+
+        .vi-stat-label {
+            font-size: 0.75rem;
+            color: #6B7A99;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 500;
+        }
+
+        .vi-footer-section {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 2rem;
+        }
+
+        .vi-footer-text {
+            font-size: 0.85rem;
+            color: #6B7A99;
+            margin-bottom: 1.5rem;
         }
     </style>
 
@@ -149,132 +153,148 @@ def show():
     <div class="vi-glow-orb"></div>
     """, unsafe_allow_html=True)
 
-    # ── Top spacer ────────────────────────────────────────────────────────────
-    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown("<br><br><br>", unsafe_allow_html=True)
 
-    # ── Eyebrow ───────────────────────────────────────────────────────────────
     st.markdown("""
     <p style="
         text-align: center;
         font-family: 'Space Mono', monospace;
-        font-size: 0.62rem;
-        letter-spacing: 0.22em;
+        font-size: 0.65rem;
+        letter-spacing: 0.25em;
         text-transform: uppercase;
         color: #FF6B6B;
-        margin: 0 0 1.1rem 0;
-        opacity: 0.8;
-    ">Visual Quality Inspection System</p>
+        margin: 0 0 1.5rem 0;
+        opacity: 0.85;
+    ">Intelligent Visual Inspection System</p>
     """, unsafe_allow_html=True)
 
-    # ── Title ─────────────────────────────────────────────────────────────────
     st.markdown("""
     <h1 style="
         text-align: center;
         font-family: 'Space Mono', monospace;
-        font-size: clamp(2.6rem, 5vw, 4rem);
+        font-size: clamp(2.8rem, 6vw, 4.2rem);
         font-weight: 700;
         color: #E8EDF5;
-        letter-spacing: -0.04em;
-        line-height: 1.08;
-        margin: 0 0 1.25rem 0;
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+        margin: 0 0 1rem 0;
     ">VisionInspect<span style="color:#FF6B6B;"> AI</span></h1>
     """, unsafe_allow_html=True)
 
-    # ── Divider glow ──────────────────────────────────────────────────────────
     st.markdown('<div class="vi-line"></div>', unsafe_allow_html=True)
 
-    # ── Description ───────────────────────────────────────────────────────────
     st.markdown("""
     <p style="
         text-align: center;
         font-family: 'Inter', sans-serif;
-        font-size: 0.975rem;
+        font-size: 1rem;
         color: #6B7A99;
-        max-width: 480px;
-        margin: 1.1rem auto 0.75rem;
+        max-width: 550px;
+        margin: 0 auto 2rem;
         line-height: 1.8;
+        font-weight: 400;
     ">
-        An intelligent defect detection system built for smartphone
-        component quality control. Upload an image or stream live from
-        your camera — the ML pipeline classifies it in real time.
+        Detect smartphone component defects in real-time using advanced
+        machine learning and computer vision. Upload an image or use your camera.
     </p>
     """, unsafe_allow_html=True)
 
-    # ── Tags ──────────────────────────────────────────────────────────────────
-    st.markdown("""
-    <div style="text-align:center; margin: 0.75rem 0 1.75rem;">
-        <span class="vi-tag">KNN</span>
-        <span class="vi-tag">SVM</span>
-        <span class="vi-tag">Random Forest</span>
-        <span class="vi-tag">OpenCV</span>
-        <span class="vi-tag">scikit-learn</span>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # ── CTA button ────────────────────────────────────────────────────────────
-    _, btn, _ = st.columns([2.6, 1, 2.6])
-    with btn:
-        if st.button("Check it out →", key="home_cta", use_container_width=True):
+    col_left, col_cta, col_right = st.columns([1, 1.2, 1])
+    with col_cta:
+        if st.button("Start Analysis →", key="cta_start", use_container_width=True):
             st.session_state.current_page = "Analyse"
             st.rerun()
 
-    # ── Stats strip ───────────────────────────────────────────────────────────
-    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("<br><br>", unsafe_allow_html=True)
     st.markdown('<div class="vi-line"></div>', unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
 
     s1, s2, s3, s4 = st.columns(4)
-    for col, num, lbl in zip(
-        [s1, s2, s3, s4],
-        ["~90%",   "3",       "<100ms",  "1000+"],
-        ["Accuracy", "Models", "Pred. Time", "Train Images"],
-    ):
+    stats = [
+        ("~90%", "Accuracy"),
+        ("3", "ML Models"),
+        ("<100ms", "Pred. Time"),
+        ("1000+", "Training Data"),
+    ]
+    for col, (num, lbl) in zip([s1, s2, s3, s4], stats):
         with col:
             st.markdown(f"""
-            <div class="vi-stat-inline">
-                <div class="vi-stat-inline-num">{num}</div>
-                <div class="vi-stat-inline-lbl">{lbl}</div>
+            <div class="vi-stat-item">
+                <div class="vi-stat-number">{num}</div>
+                <div class="vi-stat-label">{lbl}</div>
             </div>
             """, unsafe_allow_html=True)
 
-    # ── Navigation cards ──────────────────────────────────────────────────────
-    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("<br><br>", unsafe_allow_html=True)
     st.markdown("""
     <p style="
         text-align: center;
         font-family: 'Space Mono', monospace;
-        font-size: 0.62rem;
-        letter-spacing: 0.18em;
+        font-size: 0.65rem;
+        letter-spacing: 0.2em;
         text-transform: uppercase;
         color: #3D4A5C;
-        margin-bottom: 1rem;
-    ">Where do you want to go?</p>
+        margin-bottom: 2rem;
+    ">What You Can Do</p>
     """, unsafe_allow_html=True)
 
-    c1, c2, c3, c4 = st.columns(4, gap="medium")
+    st.markdown("""
+    <div class="vi-feature-grid">
+        <div class="vi-feature-item">
+            <div class="vi-feature-icon">📤</div>
+            <div class="vi-feature-title">Upload Images</div>
+            <div class="vi-feature-desc">Batch process or analyze single images with instant predictions.</div>
+        </div>
+        <div class="vi-feature-item">
+            <div class="vi-feature-icon">📷</div>
+            <div class="vi-feature-title">Live Camera</div>
+            <div class="vi-feature-desc">Real-time defect detection directly from your webcam.</div>
+        </div>
+        <div class="vi-feature-item">
+            <div class="vi-feature-icon">🤖</div>
+            <div class="vi-feature-title">3 ML Models</div>
+            <div class="vi-feature-desc">Choose between KNN, SVM, or Random Forest classifiers.</div>
+        </div>
+        <div class="vi-feature-item">
+            <div class="vi-feature-icon">🔍</div>
+            <div class="vi-feature-title">Detailed Analysis</div>
+            <div class="vi-feature-desc">See confidence scores and preprocessing pipeline visualizations.</div>
+        </div>
+        <div class="vi-feature-item">
+            <div class="vi-feature-icon">📊</div>
+            <div class="vi-feature-title">Model Metrics</div>
+            <div class="vi-feature-desc">Explore accuracy, precision, recall, and ROC-AUC comparisons.</div>
+        </div>
+        <div class="vi-feature-item">
+            <div class="vi-feature-icon">⚡</div>
+            <div class="vi-feature-title">Fast Processing</div>
+            <div class="vi-feature-desc">Sub-100ms inference time for real-world quality control.</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    nav_items = [
-        ("c1", "🔬", "Analyse",  "Analyse",  "Upload an image or use live camera to detect defects."),
-        ("c2", "📊", "Results",  "Results",  "View model metrics, comparisons and evaluation stats."),
-        ("c3", "ℹ️", "About",    "About",    "Meet the team, explore the dataset and architecture."),
-        ("c4", "📖", "Docs",     None,       "How the preprocessing and feature pipeline works."),
-    ]
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown("""
+    <div class="vi-footer-section">
+        <div class="vi-footer-text">
+            Want to learn more? Explore the team and project architecture.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    footer_col1, footer_col2 = st.columns(2, gap="small")
+    
+    with footer_col1:
+        st.link_button("👥 Meet the Team", url="?page=about", use_container_width=True)
+    
+    with footer_col2:
+        st.link_button("🔍 Start Analysing", url="?page=analyse", use_container_width=True)
+        
+    footer_col1, footer_col2 = st.columns(2, gap="small")
+    
 
-    for col, (_, icon, label, page, desc) in zip([c1, c2, c3, c4], nav_items):
-        with col:
-            st.markdown(f"""
-            <div class="vi-nav-card">
-                <div class="vi-nav-card-icon">{icon}</div>
-                <div class="vi-nav-card-title">{label}</div>
-                <div class="vi-nav-card-desc">{desc}</div>
-            </div>
-            """, unsafe_allow_html=True)
-            # Real button underneath (invisible label, just for routing)
-            if page and st.button(f"Go to {label}", key=f"nav_{label}",
-                                  use_container_width=True):
-                st.session_state.current_page = page
-                st.rerun()
 
+    st.markdown("<br>", unsafe_allow_html=True)
 
 if __name__ == "__main__":
     show()
