@@ -21,7 +21,7 @@ def show():
                 linear-gradient(90deg, rgba(255,107,107,0.02) 1px, transparent 1px);
             background-size: 64px 64px;
             pointer-events: none;
-            z-index: 0;
+            z-index: -1; /* Changed from 0 to -1 */
         }
 
         @keyframes pulse-glow {
@@ -42,9 +42,10 @@ def show():
             left: 50%;
             transform: translate(-50%, -50%);
             pointer-events: none;
-            z-index: 0;
+            z-index: -2; /* Changed from 0 to -2 so it sits below hero-bg */
             animation: pulse-glow 5s ease-in-out infinite;
         }
+
 
         .vi-line {
             height: 1px;
@@ -289,9 +290,6 @@ def show():
     
     with footer_col2:
         st.link_button("🔍 Start Analysing", url="?page=analyse", use_container_width=True)
-        
-    footer_col1, footer_col2 = st.columns(2, gap="small")
-    
 
 
     st.markdown("<br>", unsafe_allow_html=True)
