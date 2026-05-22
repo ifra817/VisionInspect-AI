@@ -26,13 +26,19 @@ if "selected_model" not in st.session_state:
 # 3. Handle URL query parameters for navigation
 query_params = st.query_params
 if "page" in query_params:
-    page = query_params["page"]
-    if page.lower() == "about":
-        st.session_state.current_page = "About"
-    elif page.lower() == "analyse":
-        st.session_state.current_page = "Analyse"
-    elif page.lower() == "home":
-        st.session_state.current_page = "Home"
+    page_key = str(query_params["page"]).lower().strip()
+
+    page_map = {
+        "home": "Home",
+        "analyse": "Analyse",
+        "about": "About",
+        "live": "Live Demo",
+        "metrics": "Metrics",
+        "model-compare": "Model Compare",
+        "results": "Results",
+    }
+    if page_key in page_map:
+        st.session_state.current_page = page_map[page_key]
 
 load_css()
 
@@ -68,7 +74,15 @@ with st.sidebar:
     st.divider()
     st.markdown('<p class="vi-nav-label">Navigation</p>', unsafe_allow_html=True)
 
-    PAGES = ["Home", "Analyse", "About"]
+    PAGES = [
+        "Home",
+        "Analyse",
+        "Live Demo",
+        "Metrics",
+        "Model Compare",
+        "Results",
+        "About",
+    ]
 
     # Safe index lookup for smooth rendering
     if st.session_state.current_page not in PAGES:
@@ -135,6 +149,18 @@ def _load(name: str) -> None:
         elif name == "About":
             from views import about
             about.show()
+        elif name == "Live Demo":
+            from views import live_demo
+            live_demo.show()
+        elif name == "Metrics":
+            from views import metrics
+            metrics.show()
+        elif name == "Model Compare":
+            from views import model_compare
+            model_compare.show()
+        elif name == "Results":
+            from views import results
+            results.show()
     except ModuleNotFoundError as exc:
         st.error(f"View not found — {exc}")
         st.caption("Make sure the file exists inside your `views/` folder.")
