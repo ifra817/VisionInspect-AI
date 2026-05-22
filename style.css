@@ -61,7 +61,7 @@ html, body,
     max-width: 1100px !important;
 }
 
-#MainMenu, footer, header { visibility: hidden; }
+#MainMenu, footer { visibility: hidden; }
 
 [data-testid="stSidebar"] {
     background: var(--c-surface) !important;
