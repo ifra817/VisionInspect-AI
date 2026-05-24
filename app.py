@@ -34,8 +34,8 @@ if "page" in query_params:
         "about": "About",
         "live": "Live Demo",
         "metrics": "Metrics",
-        "model-compare": "Model Compare",
-        "results": "Results",
+        "model-compare": "Model Compare"
+        # "results": "Results",
     }
     if page_key in page_map:
         st.session_state.current_page = page_map[page_key]
@@ -80,7 +80,7 @@ with st.sidebar:
         "Live Demo",
         "Metrics",
         "Model Compare",
-        "Results",
+        # "Results",
         "About",
     ]
 
@@ -158,9 +158,9 @@ def _load(name: str) -> None:
         elif name == "Model Compare":
             from views import model_compare
             model_compare.show()
-        elif name == "Results":
-            from views import results
-            results.show()
+        # elif name == "Results":
+        #     from views import results
+        #     results.show()
     except ModuleNotFoundError as exc:
         st.error(f"View not found — {exc}")
         st.caption("Make sure the file exists inside your `views/` folder.")

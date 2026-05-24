@@ -10,7 +10,7 @@ def show():
     st.markdown("""
     <style>
         [data-testid="stMainBlockContainer"] {
-            padding-top: 0 !important;
+            padding-top: 4rem !important;
         }
 
         .vi-hero-bg {

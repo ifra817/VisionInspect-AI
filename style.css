@@ -56,8 +56,12 @@ html, body,
     color: var(--c-text) !important;
 }
 
+/* Leave room for Streamlit toolbar/header so it doesn't overlap content */
 [data-testid="stMainBlockContainer"] {
-    padding: 2rem 2.5rem 3rem !important;
+    padding-top: 4rem !important;   /* increase from your current padding-top */
+    padding-right: 2.5rem !important;
+    padding-bottom: 3rem !important;
+    padding-left: 2.5rem !important;
     max-width: 1100px !important;
 }
 
