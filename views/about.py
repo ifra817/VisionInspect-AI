@@ -177,3 +177,6 @@ def show():
     with repo2:
         st.markdown("**Development Status**")
         st.success("● Active Development")
+
+if __name__ == "__main__":
+    show()

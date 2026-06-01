@@ -35,7 +35,6 @@ if "page" in query_params:
         "live": "Live Demo",
         "metrics": "Metrics",
         "model-compare": "Model Compare"
-        # "results": "Results",
     }
     if page_key in page_map:
         st.session_state.current_page = page_map[page_key]
@@ -80,7 +79,6 @@ with st.sidebar:
         "Live Demo",
         "Metrics",
         "Model Compare",
-        # "Results",
         "About",
     ]
 
@@ -143,7 +141,6 @@ def _load(name: str) -> None:
             from views import home
             home.show()
         elif name == "Analyse":
-            # Directing this safely to views/predict.py where your CV pipeline is fixed
             from views import predict
             predict.show()
         elif name == "About":
@@ -158,9 +155,6 @@ def _load(name: str) -> None:
         elif name == "Model Compare":
             from views import model_compare
             model_compare.show()
-        # elif name == "Results":
-        #     from views import results
-        #     results.show()
     except ModuleNotFoundError as exc:
         st.error(f"View not found — {exc}")
         st.caption("Make sure the file exists inside your `views/` folder.")

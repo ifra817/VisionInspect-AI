@@ -155,3 +155,6 @@ def show():
         **Pros:** Handles non-linear patterns, resistant to overfitting
         **Cons:** Harder to interpret, larger model size
         """)
+
+if __name__ == "__main__":
+    show()
