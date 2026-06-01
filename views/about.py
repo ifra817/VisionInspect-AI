@@ -1,23 +1,34 @@
-"""
-ℹ️ About Page - VisionInspect AI
-"""
-
+# ==============================================
+# FILE: views/about.py
+# PURPOSE: Streamlit-based About Page
+# ==============================================
 import streamlit as st
 
 def show():
     # ── Page Header ──────────────────────────────────────────────────────────
-    st.title("ℹ️ About VisionInspect AI")
-    st.markdown("##### Intelligent Visual Quality Inspection using Machine Learning and OpenCV")
-    st.divider()
+    st.markdown("""
+    <div class="vi-page-title">ℹ️ About <span>VisionInspect AI</span></div>
+    <div class="vi-page-subtitle">
+        Intelligent Visual Quality Inspection using Machine Learning and OpenCV
+    </div>
+    """, unsafe_allow_html=True)
 
     # ── Project Overview ─────────────────────────────────────────────────────
     st.header("What is VisionInspect AI?")
-    st.info(
-        "**VisionInspect AI** is an intelligent defect detection system built for smartphone "
-        "component quality control using machine learning and computer vision.\n\n"
-        "The system combines OpenCV-based preprocessing techniques with handcrafted LBP "
-        "texture features and multiple machine learning classifiers including KNN, SVM, and Random Forest."
-    )
+    
+    # Replaced st.info with your design system's custom accent card
+    st.markdown("""
+    <div class="vi-card accent-left">
+        <p style="margin: 0; line-height: 1.6; font-size: 0.95rem; color: var(--c-text);">
+            <strong>VisionInspect AI</strong> is an intelligent defect detection system built for smartphone 
+            component quality control using machine learning and computer vision.
+        </p>
+        <p style="margin: 0.75rem 0 0 0; line-height: 1.6; font-size: 0.95rem; color: var(--c-text-dim);">
+            The system combines OpenCV-based preprocessing techniques with handcrafted LBP 
+            texture features and multiple machine learning classifiers including KNN, SVM, and Random Forest.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     
     st.write("") # Spacer
 
@@ -56,17 +67,13 @@ def show():
     st.header("How It Works")
     
     st.markdown("""
-    **1️⃣ Image Acquisition**  
-    Users upload smartphone component images or capture them directly through a webcam. Images are resized for consistent processing.
+    **1️⃣ Image Acquisition** Users upload smartphone component images or capture them directly through a webcam. Images are resized for consistent processing.
     
-    **2️⃣ Preprocessing Pipeline**  
-    Images are converted to grayscale, denoised using Gaussian blur, and processed with edge detection for structural analysis.
+    **2️⃣ Preprocessing Pipeline** Images are converted to grayscale, denoised using Gaussian blur, and processed with edge detection for structural analysis.
     
-    **3️⃣ Feature Extraction**  
-    The system extracts handcrafted texture and edge-based features including Local Binary Patterns and edge density maps.
+    **3️⃣ Feature Extraction** The system extracts handcrafted texture and edge-based features including Local Binary Patterns and edge density maps.
     
-    **4️⃣ Classification & Results**  
-    Extracted features are passed into the selected machine learning classifier to predict whether the component is normal or defective.
+    **4️⃣ Classification & Results** Extracted features are passed into the selected machine learning classifier to predict whether the component is normal or defective.
     """)
 
     st.divider()
@@ -133,7 +140,6 @@ def show():
     
     with tech_left:
         st.markdown("##### 🔧 Backend & ML")
-        # Using inline code ticks to create a "pill" look natively in Streamlit
         st.markdown("`Python` &nbsp; `OpenCV` &nbsp; `Scikit-Learn` &nbsp; `NumPy` &nbsp; `Pandas`", unsafe_allow_html=True)
         
     with tech_right:

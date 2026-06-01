@@ -1,52 +1,50 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-    /* Colours */
-    --c-accent:          #FF6B6B;
-    --c-accent-dim:      #E85555;
-    --c-accent-glow:     rgba(255, 107, 107, 0.15);
-    --c-success:         #00D4AA;
-    --c-success-dim:     rgba(0, 212, 170, 0.12);
-    --c-info:            #4A9EFF;
-    --c-warning:         #FFD43B;
+    /* Semantic Colors */
+    --c-accent:           #FF6B6B;
+    --c-accent-dim:       #E85555;
+    --c-accent-glow:      rgba(255, 107, 107, 0.2);
+    --c-success:          #00D4AA;
+    --c-success-dim:      rgba(0, 212, 170, 0.12);
+    --c-info:             #4A9EFF;
+    --c-warning:          #FFD43B;
 
-    /* Backgrounds */
-    --c-bg:              #0A0E1A;
-    --c-surface:         #111827;
-    --c-elevated:        #1A2235;
-    --c-hover:           #1F2A40;
+    /* Background Surface Hierarchy */
+    --c-bg:               #0A0E1A;
+    --c-surface:          #111827;
+    --c-elevated:         #1A2235;
+    --c-hover:            #1F2A40;
 
-    /* Borders */
-    --c-border:          rgba(255, 255, 255, 0.06);
-    --c-border-mid:      rgba(255, 255, 255, 0.12);
-    --c-border-accent:   rgba(255, 107, 107, 0.35);
+    /* Structural Borders */
+    --c-border:           rgba(255, 255, 255, 0.06);
+    --c-border-mid:       rgba(255, 255, 255, 0.12);
+    --c-border-accent:    rgba(255, 107, 107, 0.35);
 
-    /* Text — ADD THESE */
-    --c-text:            #E8EDF5;
-    --c-text-dim:        #6B7A99;
-    --c-text-muted:      #3D4A5C;
-    --text-primary:      #E8EDF5;
-    --text-secondary:    #6B7A99;
-    --text-dim:          #6B7A99;
-    --accent:            #FF6B6B;
-    --success:           #00D4AA;
-    --info:              #4A9EFF;
-    --font-display:      'Space Mono', monospace;
-    --font-body:         'Inter', sans-serif;
+    /* Cleaned Text Variables (Upgraded for high-contrast accessibility) */
+    --c-text:             #E8EDF5;
+    --c-text-dim:         #A3B3CC; /* Upgraded from #6B7A99 for readability */
+    --c-text-muted:       #5C6E8C; /* Upgraded from #3D4A5C */
 
-    /* Typography */
-    --f-display:         'Space Mono', monospace;
-    --f-body:            'Inter', sans-serif;
+    /* Typography Typography Stacks */
+    --f-display:          'Space Mono', monospace;
+    --f-body:             'Inter', sans-serif;
 
-    /* Radii */
-    --r-sm:              6px;
-    --r-md:              10px;
-    --r-lg:              16px;
+    /* Border Radii */
+    --r-sm:               6px;
+    --r-md:               10px;
+    --r-lg:               16px;
 
-    /* Shadows */
-    --s-card:            0 4px 20px rgba(0, 0, 0, 0.4);
-    --s-accent:          0 6px 28px rgba(255, 107, 107, 0.18);
+    /* Drop & Glow Shadows */
+    --s-card:             0 4px 20px rgba(0, 0, 0, 0.4);
+    --s-accent:           0 6px 28px rgba(255, 107, 107, 0.18);
+    --s-glow-text:        0 0 20px rgba(232, 237, 245, 0.15), 0 0 40px rgba(255, 107, 107, 0.15);
+    --s-glow-accent:      0 0 15px rgba(255, 107, 107, 0.6), 0 0 30px rgba(255, 107, 107, 0.2);
 }
+
+/* ============================================================================
+   GLOBAL RESET & FRAMEWORK OVERRIDES
+   ============================================================================ */
 
 html, body,
 [data-testid="stAppViewContainer"],
@@ -56,9 +54,9 @@ html, body,
     color: var(--c-text) !important;
 }
 
-/* Leave room for Streamlit toolbar/header so it doesn't overlap content */
+/* Master Layout Constraints */
 [data-testid="stMainBlockContainer"] {
-    padding-top: 4rem !important;   /* increase from your current padding-top */
+    padding-top: 4rem !important;
     padding-right: 2.5rem !important;
     padding-bottom: 3rem !important;
     padding-left: 2.5rem !important;
@@ -66,6 +64,10 @@ html, body,
 }
 
 #MainMenu, footer { visibility: hidden; }
+
+/* ============================================================================
+   SIDEBAR & COMPONENT NAVIGATION Styling
+   ============================================================================ */
 
 [data-testid="stSidebar"] {
     background: var(--c-surface) !important;
@@ -76,18 +78,20 @@ html, body,
     padding: 1.5rem 1.25rem !important;
 }
 
+/* Navigation Radios styling */
 [data-testid="stSidebar"] [data-testid="stRadio"] label {
     font-family: var(--f-body) !important;
     font-size: 0.875rem !important;
     color: var(--c-text-dim) !important;
     padding: 0.3rem 0 !important;
-    transition: color 0.15s;
+    transition: color 0.15s ease;
 }
 
 [data-testid="stSidebar"] [data-testid="stRadio"] label:hover {
     color: var(--c-text) !important;
 }
 
+/* Dropdowns / Selectboxes styling */
 [data-testid="stSidebar"] [data-testid="stSelectbox"] > div > div {
     background: var(--c-elevated) !important;
     border: 1px solid var(--c-border-mid) !important;
@@ -96,6 +100,7 @@ html, body,
     font-size: 0.875rem !important;
 }
 
+/* Native Dash Metrics styling */
 [data-testid="stMetric"] {
     background: var(--c-elevated) !important;
     border: 1px solid var(--c-border) !important;
@@ -116,9 +121,13 @@ html, body,
     font-size: 1rem !important;
 }
 
-.stButton > button {
-    background: linear-gradient(135deg, #FF6B6B 0%, #E85555 100%) !important;
-    color: #fff !important;
+/* ============================================================================
+   NATIVE STREAMLIT BUTTON OVERRIDES (Action & Link Variants)
+   ============================================================================ */
+
+.stButton > button, div[data-testid="stLinkButton"] a {
+    background: linear-gradient(135deg, var(--c-accent) 0%, var(--c-accent-dim) 100%) !important;
+    color: #ffffff !important;
     border: none !important;
     border-radius: var(--r-sm) !important;
     font-family: var(--f-body) !important;
@@ -126,19 +135,28 @@ html, body,
     font-size: 0.875rem !important;
     letter-spacing: 0.01em !important;
     padding: 0.55rem 1.5rem !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     transition: opacity 0.18s, transform 0.15s, box-shadow 0.18s !important;
     box-shadow: var(--s-accent) !important;
 }
 
-.stButton > button:hover {
-    opacity: 0.88 !important;
+.stButton > button:hover, div[data-testid="stLinkButton"] a:hover {
+    opacity: 0.92 !important;
     transform: translateY(-2px) !important;
-    box-shadow: 0 10px 32px rgba(255, 107, 107, 0.28) !important;
+    box-shadow: 0 10px 32px rgba(255, 107, 107, 0.35) !important;
+    color: #ffffff !important;
 }
 
-.stButton > button:active {
+.stButton > button:active, div[data-testid="stLinkButton"] a:active {
     transform: translateY(0) !important;
 }
+
+/* ============================================================================
+   MISC INTERACTION ELEMENTS
+   ============================================================================ */
 
 hr, [data-testid="stDivider"] {
     border-color: var(--c-border) !important;
@@ -153,12 +171,12 @@ hr, [data-testid="stDivider"] {
 }
 
 [data-testid="stProgressBar"] > div {
-    background: rgba(255, 107, 107, 0.15) !important;
+    background: var(--c-accent-glow) !important;
     border-radius: 99px !important;
 }
 
 [data-testid="stProgressBar"] > div > div {
-    background: linear-gradient(90deg, #FF6B6B, #E85555) !important;
+    background: linear-gradient(90deg, var(--c-accent), var(--c-accent-dim)) !important;
     border-radius: 99px !important;
 }
 
@@ -175,95 +193,100 @@ code, pre {
     border-radius: var(--r-sm) !important;
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   SHARED COMPONENT CLASSES — ADD ALL MISSING ONES
-   ══════════════════════════════════════════════════════════════════════════ */
+/* ============================================================================
+   SHARED REUSABLE UI CLASSES (Cleaned & Glow-Enabled)
+   ============================================================================ */
 
 .vi-page-title {
-    font-family: 'Space Mono', monospace;
-    font-size: 2.2rem;
+    font-family: var(--f-display) !important;
+    font-size: 2.4rem;
     font-weight: 700;
-    color: #E8EDF5;
+    color: var(--c-text);
     letter-spacing: -0.03em;
     line-height: 1.2;
     margin: 0 0 0.5rem 0;
+    text-shadow: var(--s-glow-text);
 }
 
 .vi-page-title span {
-    color: #FF6B6B;
+    color: var(--c-accent);
+    text-shadow: var(--s-glow-accent);
 }
 
 .vi-page-subtitle {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--f-body) !important;
     font-size: 0.95rem;
-    color: #6B7A99;
+    color: var(--c-text-dim);
     margin: 0 0 2rem 0;
     font-weight: 400;
     line-height: 1.6;
 }
 
 .vi-section-label {
-    font-family: 'Space Mono', monospace;
+    font-family: var(--f-display) !important;
     font-size: 1.15rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #FF6B6B;
+    color: var(--c-accent);
     margin: 0 0 1.5rem 0;
     font-weight: 700;
 }
+
 .vi-card {
-    background: #111827;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 10px;
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
     padding: 1.25rem 1.5rem;
     margin: 0.5rem 0;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .vi-card:hover {
-    border-color: rgba(255, 107, 107, 0.3);
-    box-shadow: 0 6px 28px rgba(255, 107, 107, 0.12);
+    border-color: var(--c-border-accent);
+    box-shadow: 0 8px 30px rgba(255, 107, 107, 0.08);
+    transform: translateY(-1px);
 }
 
 .vi-card.accent-left {
-    border-left: 3px solid #FF6B6B;
-    border-radius: 0 10px 10px 0;
+    border-left: 3px solid var(--c-accent);
+    /* Keeps top-left and bottom-left flush with the accent border line */
+    border-radius: 0 var(--r-md) var(--r-md) 0; 
 }
 
 .vi-tech-pill {
     display: inline-block;
-    background: #1A2235;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #6B7A99;
+    background: var(--c-elevated);
+    border: 1px solid var(--c-border-mid);
+    color: var(--c-text-dim);
     padding: 0.35rem 0.85rem;
     border-radius: 99px;
     font-size: 0.78rem;
     font-weight: 500;
     margin: 0.25rem;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--f-body) !important;
 }
 
 .vi-stat {
-    background: #1A2235;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 10px;
+    background: var(--c-elevated);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
     padding: 1.1rem 1rem;
     text-align: center;
 }
 
 .vi-stat-number {
-    font-family: 'Space Mono', monospace;
+    font-family: var(--f-display) !important;
     font-size: 1.6rem;
     font-weight: 700;
-    color: #FF6B6B;
+    color: var(--c-accent);
     line-height: 1;
     margin-bottom: 0.35rem;
 }
 
 .vi-stat-label {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--f-body) !important;
     font-size: 0.7rem;
-    color: #6B7A99;
+    color: var(--c-text-dim);
     text-transform: uppercase;
     letter-spacing: 0.08em;
 }
@@ -272,7 +295,7 @@ code, pre {
     display: inline-block;
     padding: 0.4rem 1rem;
     border-radius: 99px;
-    font-family: 'Space Mono', monospace;
+    font-family: var(--f-display) !important;
     font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 0.05em;
@@ -280,22 +303,153 @@ code, pre {
 
 .vi-badge.normal {
     background: rgba(0, 212, 170, 0.1);
-    color: #00D4AA;
+    color: var(--c-success);
     border: 1px solid rgba(0, 212, 170, 0.28);
 }
 
 .vi-badge.defective {
     background: rgba(255, 107, 107, 0.1);
-    color: #FF6B6B;
-    border: 1px solid rgba(255, 107, 107, 0.3);
+    color: var(--c-accent);
+    border: 1px solid var(--c-border-accent);
 }
 
 .vi-nav-label {
-    font-family: 'Space Mono', monospace;
+    font-family: var(--f-display) !important;
     font-size: 0.62rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #3D4A5C;
+    color: var(--c-text-muted);
     margin: 0 0 0.5rem 0;
     padding: 0;
+}
+
+/* ============================================================================
+   MODEL COMPARE PAGE CUSTOM CARDS (.descCard Layouts)
+   ============================================================================ */
+
+.descCard {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    padding: 1.5rem;
+    margin: 1.25rem 0;
+    box-shadow: var(--s-card);
+}
+
+.descHeader {
+    display: flex;
+    align-items: center; /* Forces icon and text to align vertically on the same line */
+    gap: 0.75rem;        /* Perfectly spaces the emoji and header text */
+    margin-bottom: 0.75rem;
+}
+
+.descIcon {
+    font-size: 1.4rem;
+    line-height: 1;
+}
+
+.descTitle {
+    font-family: var(--f-body) !important;
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+    color: var(--c-text) !important;
+    margin: 0 !important; /* Prevents default heading margins from breaking vertical alignment */
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.descText {
+    font-family: var(--f-body);
+    font-size: 0.9rem;
+    color: var(--c-text-dim);
+    margin: 0 0 1.25rem 0;
+    line-height: 1.5;
+}
+
+.descStats {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.descStats .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.descStats .statLabel {
+    font-size: 0.7rem;
+    color: var(--c-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.descStats .statValue {
+    font-family: var(--f-display);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--c-text);
+}
+
+.bestBadge {
+    background: rgba(0, 212, 170, 0.15);
+    color: var(--c-success);
+    border: 1px solid rgba(0, 212, 170, 0.3);
+    font-family: var(--f-display);
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--r-sm);
+    letter-spacing: 0.05em;
+    margin-left: 0.5rem;
+}
+
+/* ============================================================================
+   KEY TAKEAWAYS GRID & CARDS (.takeawaysGrid Layouts)
+   ============================================================================ */
+
+.takeawaysGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Responsive grid columns */
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.takeaway {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    padding: 1.25rem;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.takeaway:hover {
+    border-color: var(--c-border-mid);
+    transform: translateY(-2px);
+}
+
+/* Flex layout to keep icon and heading perfectly inline */
+.takeaway h4 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--f-body) !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: var(--c-text) !important;
+    margin: 0 0 0.5rem 0 !important; /* Strips browser default margins */
+}
+
+.takeawayIcon {
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+.takeaway p {
+    font-family: var(--f-body);
+    font-size: 0.85rem;
+    color: var(--c-text-dim);
+    line-height: 1.5;
+    margin: 0;
 }

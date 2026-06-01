@@ -65,6 +65,7 @@ def show():
             grid-template-columns: repeat(3, 1fr);
             gap: 1.5rem;
             margin-top: 3rem;
+            margin-bottom: 3.5rem !important; /* Added to separate from elements below */
         }
 
         @media (max-width: 900px) {
@@ -160,27 +161,31 @@ def show():
     <p style="
         text-align: center;
         font-family: 'Space Mono', monospace;
-        font-size: 0.65rem;
+        font-size: 0.85rem;
         letter-spacing: 0.25em;
         text-transform: uppercase;
         color: #FF6B6B;
         margin: 0 0 1.5rem 0;
         opacity: 0.85;
+        text-shadow: 0 0 10px rgba(255, 107, 107, 0.25); /* Subtle glow shadow added */
     ">Intelligent Visual Inspection System</p>
     """, unsafe_allow_html=True)
 
     st.markdown("""
-    <h1 style="
-        text-align: center;
-        font-family: 'Space Mono', monospace;
-        font-size: clamp(2.8rem, 6vw, 4.2rem);
-        font-weight: 700;
-        color: #E8EDF5;
-        letter-spacing: -0.03em;
-        line-height: 1.1;
-        margin: 0 0 1rem 0;
-    ">VisionInspect<span style="color:#FF6B6B;"> AI</span></h1>
-    """, unsafe_allow_html=True)
+        <h1 style="
+            text-align: center;
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(2.8rem, 6vw, 4.2rem);
+            font-weight: 700;
+            color: #E8EDF5;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin: 0 0 1rem 0;
+            text-shadow: 
+                0 0 15px rgba(232, 237, 245, 0.45), 
+                0 0 30px rgba(255, 107, 107, 0.2); /* Enhanced bright white front glow with a soft accent backing */
+        ">VisionInspect<span style="color:#FF6B6B; text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);"> AI</span></h1>
+        """, unsafe_allow_html=True)
 
     st.markdown('<div class="vi-line"></div>', unsafe_allow_html=True)
 
@@ -274,7 +279,8 @@ def show():
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("<br><br>", unsafe_allow_html=True)
+    # Note: Streamlit's markdown divider or empty text blocks can sometimes clash with floats,
+    # so we rely completely on the grid's bottom margin to securely push the footer down.
     st.markdown("""
     <div class="vi-footer-section">
         <div class="vi-footer-text">

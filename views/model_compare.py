@@ -18,9 +18,8 @@ def show():
     st.markdown("""
     <div class="bestModelBanner">
         <div class="badgeContent">
-            <span class="crown">🏆</span>
+            <h3 class="badgeTitle"><span class="crown">🏆</span>RECOMMENDED MODEL</h3>
             <div>
-                <h3 class="badgeTitle">RECOMMENDED MODEL</h3>
                 <p class="badgeText"><strong>SVM (RBF Kernel)</strong> — Best accuracy at 87% with confidence score of 0.92 AUC</p>
             </div>
         </div>
@@ -84,11 +83,14 @@ def show():
     for name, model in model_data.items():
         is_best = model.get('isBest', False)
         best_html = '<span class="bestBadge">BEST</span>' if is_best else ''
+        border_color = '#FF6B6B' if name == 'SVM' else '#4A9EFF' if name == 'KNN' else '#00D4AA'
+        icon = "🔍" if name == "KNN" else "⚡" if name == "SVM" else "🌲"
+        
         st.markdown(f"""
-        <div class="descCard" style="border-left:3px solid {('#FF6B6B' if name=='SVM' else '#4A9EFF' if name=='KNN' else '#00D4AA')}">
+        <div class="descCard" style="border-left:3px solid {border_color}">
             <div class="descHeader">
-                <span class="descIcon">{"🔍" if name=="KNN" else "⚡" if name=="SVM" else "🌲"}</span>
-                <h3 class="descTitle">{name} {best_html}</h3>
+                <span class="descIcon">{icon}</span>
+                <h3 class="descTitle">{name}{best_html}</h3>
             </div>
             <p class="descText">{model['description']}</p>
             <div class="descStats">
@@ -127,25 +129,21 @@ def show():
     st.subheader("Key Takeaways")
     st.markdown("""
     <div class="takeawaysGrid">
-    <div class="takeaway">
-        <span class="takeawayIcon">🎯</span>
-        <h4>SVM Outperforms</h4>
-        <p>SVM with RBF kernel achieves the highest accuracy and AUC, making it the production choice.</p>
-    </div>
-    <div class="takeaway">
-        <span class="takeawayIcon">⚡</span>
-        <h4>KNN Speed</h4>
-        <p>KNN trains fastest but sacrifices ~9% accuracy. Good for rapid prototyping.</p>
-    </div>
-    <div class="takeaway">
-        <span class="takeawayIcon">🌳</span>
-        <h4>Random Forest Balance</h4>
-        <p>RF offers good balance between speed and accuracy with high interpretability.</p>
-    </div>
-    <div class="takeaway">
-        <span class="takeawayIcon">🔬</span>
-        <h4>Recall is Critical</h4>
-        <p>In defect detection, missing a crack is costlier than a false alarm. All models perform well on recall.</p>
-    </div>
+        <div class="takeaway">
+            <h4><span class="takeawayIcon">🎯</span> SVM Outperforms</h4>
+            <p>SVM with RBF kernel achieves the highest accuracy and AUC, making it the production choice.</p>
+        </div>
+        <div class="takeaway">
+            <h4><span class="takeawayIcon">⚡</span> KNN Speed</h4>
+            <p>KNN trains fastest but sacrifices ~9% accuracy. Good for rapid prototyping.</p>
+        </div>
+        <div class="takeaway">
+            <h4><span class="takeawayIcon">🌳</span> Random Forest</h4>
+            <p>RF offers good balance between speed and accuracy with high interpretability.</p>
+        </div>
+        <div class="takeaway">
+            <h4><span class="takeawayIcon">🔬</span> Recall is Critical</h4>
+            <p>In defect detection, missing a crack is costlier than a false alarm. All models perform well on recall.</p>
+        </div>
     </div>
     """, unsafe_allow_html=True)

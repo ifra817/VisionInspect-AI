@@ -75,6 +75,21 @@ def load_cached_scaler():
 # ============================================================================
 
 def show():
+    # 1. Inject CSS to push the entire content block down
+    st.markdown("""
+        <style>
+            /* Targets the main content area */
+            [data-testid="stMainBlockContainer"] {
+                padding-top: 6rem !important;
+            }
+            /* Optional: ensure the title has a bit of extra space regardless of global padding */
+            .vi-page-title {
+                margin-top: 1rem !important;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+
+    # 2. Page Header
     st.markdown("""
     <div class="vi-page-title">🔍 Predict <span>Defects</span></div>
     <div class="vi-page-subtitle">
